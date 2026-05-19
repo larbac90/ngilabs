@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Estudo de Impacto Financeiro</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Segoe UI",sans-serif;
+    background:#eef4fb;
+    color:#0f172a;
+    min-height:100vh;
+    padding:24px;
+}
+
+.container{
+    display:grid;
+    grid-template-columns:520px 1fr;
+    gap:24px;
+    align-items:start;
+}
+
+.card{
+    background:white;
+    border-radius:24px;
+    border:1px solid #dbe4ee;
+    box-shadow:0 10px 30px rgba(15,23,42,0.06);
+}
+
+.left-panel{
+    padding:24px;
+    position:sticky;
+    top:24px;
+}
+
+.right-panel{
+    padding:24px;
+}
+
+.header{
+    margin-bottom:28px;
+}
+
+.header h1{
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+.header p{
+    color:#475569;
+    line-height:1.5;
+}
+
+.section-title{
+    font-size:20px;
+    margin-bottom:20px;
+    font-weight:700;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+}
+
+.input-group{
+    margin-bottom:18px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:600;
+    color:#334155;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border-radius:14px;
+    border:1px solid #cbd5e1;
+    background:white;
+    font-size:15px;
+    transition:0.2s;
+}
+
+input:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 4px rgba(37,99,235,0.12);
+}
+
+.scenario{
+    background:#f8fbff;
+    border:1px solid #dbe4ee;
+    border-radius:20px;
+    padding:18px;
+    margin-bottom:18px;
+}
+
+.scenario-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+}
+
+.scenario-title{
+    font-size:18px;
+    font-weight:700;
+    color:#2563eb;
+}
+
+.btn{
+    border:none;
+    border-radius:14px;
+    padding:14px 18px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.btn-primary{
+    background:#2563eb;
+    color:white;
+}
+
+.btn-primary:hover{
+    transform:translateY(-1px);
+    box-shadow:0 10px 20px rgba(37,99,235,0.18);
+}
+
+.btn-secondary{
+    background:#e2e8f0;
+    color:#0f172a;
+}
+
+.actions{
+    display:flex;
+    gap:12px;
+    margin-top:20px;
+}
+
+.impact-area{
+    background:white;
+    border-radius:24px;
+}
+
+.impact-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:28px;
+    flex-wrap:wrap;
+    gap:16px;
+}
+
+.kpis{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+    margin-bottom:28px;
+}
+
+.kpi{
+    background:linear-gradient(180deg,#ffffff,#f8fbff);
+    border:1px solid #dbe4ee;
+    border-radius:20px;
+    padding:22px;
+}
+
+.kpi-label{
+    color:#64748b;
+    font-size:13px;
+    margin-bottom:10px;
+}
+
+.kpi-value{
+    font-size:30px;
+    font-weight:700;
+}
+
+.chart-card{
+    background:#f8fbff;
+    border:1px solid #dbe4ee;
+    border-radius:22px;
+    padding:24px;
+    margin-bottom:24px;
+}
+
+.table-card{
+    background:#f8fbff;
+    border:1px solid #dbe4ee;
+    border-radius:22px;
+    overflow:hidden;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#eff6ff;
+    color:#1d4ed8;
+    font-size:14px;
+    text-align:left;
+    padding:18px;
+}
+
+td{
+    padding:18px;
+    border-top:1px solid #dbe4ee;
+    background:white;
+}
+
+.badge{
+    padding:8px 12px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:700;
+    display:inline-flex;
+}
+
+.badge-up{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.badge-down{
+    background:#dcfce7;
+    color:#166534;
+}
+
+@media(max-width:1200px){
+
+    .container{
+        grid-template-columns:1fr;
+    }
+
+    .left-panel{
+        position:relative;
+        top:auto;
+    }
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ESQUERDA -->
+
+    <div class="card left-panel">
+
+        <div class="header">
+            <h1>📊 Estudo de Impacto</h1>
+            <p>
+                Simulação financeira profissional para análise de cenários
+                de contratação de estagiários.
+            </p>
+        </div>
+
+        <div class="section-title">
+            Cenário Atual
+        </div>
+
+        <div class="grid">
+
+            <div class="input-group">
+                <label>Quantidade</label>
+                <input type="number" id="qtdAtual" value="10">
+            </div>
+
+            <div class="input-group">
+                <label>Bolsa (R$)</label>
+                <input type="number" id="bolsaAtual" value="1200">
+            </div>
+
+        </div>
+
+        <div class="input-group">
+            <label>Transporte (R$)</label>
+            <input type="number" id="vtAtual" value="200">
+        </div>
+
+        <div class="section-title" style="margin-top:28px;">
+            Cenários Simulados
+        </div>
+
+        <div id="cenarios"></div>
+
+        <div class="actions">
+
+            <button class="btn btn-primary"
+                onclick="adicionarCenario()">
+                + Cenário
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- DIREITA -->
+
+    <div class="impact-area" id="impactoArea">
+
+        <div class="card right-panel">
+
+            <div class="impact-header">
+
+                <div>
+                    <h1 style="font-size:32px;">
+                        📈 Comparativo de Impacto
+                    </h1>
+
+                    <p style="color:#64748b;margin-top:6px;">
+                        Comparação financeira entre o cenário atual e projeções futuras.
+                    </p>
+                </div>
+
+                <button class="btn btn-primary"
+                    onclick="salvarImagem()">
+                    🖼️ Salvar Imagem
+                </button>
+
+            </div>
+
+            <!-- KPIS -->
+
+            <div class="kpis">
+
+                <div class="kpi">
+                    <div class="kpi-label">
+                        Custo Atual Mensal
+                    </div>
+
+                    <div class="kpi-value" id="kpiAtual">
+                        R$ 0
+                    </div>
+                </div>
+
+                <div class="kpi">
+                    <div class="kpi-label">
+                        Maior Cenário
+                    </div>
+
+                    <div class="kpi-value" id="kpiMaior">
+                        R$ 0
+                    </div>
+                </div>
+
+                <div class="kpi">
+                    <div class="kpi-label">
+                        Impacto Máximo
+                    </div>
+
+                    <div class="kpi-value" id="kpiImpacto">
+                        R$ 0
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- GRAFICO -->
+
+            <div class="chart-card">
+
+                <div style="font-size:18px;font-weight:700;margin-bottom:20px;">
+                    Evolução dos Custos Mensais
+                </div>
+
+                <canvas id="grafico"></canvas>
+
+            </div>
+
+            <!-- TABELA -->
+
+            <div class="table-card">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Cenário</th>
+                            <th>Qtd.</th>
+                            <th>Custo Mensal</th>
+                            <th>Custo Anual</th>
+                            <th>Impacto</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tabelaResultados"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+let contador = 0;
+let chart;
+
+function moeda(valor){
+
+    return valor.toLocaleString('pt-BR',{
+        style:'currency',
+        currency:'BRL'
+    });
+
+}
+
+function custo(qtd, bolsa, vt){
+
+    return qtd * (bolsa + vt);
+
+}
+
+function adicionarCenario(){
+
+    contador++;
+
+    const html = `
+
+        <div class="scenario" id="cenario-${contador}">
+
+            <div class="scenario-header">
+
+                <div class="scenario-title">
+                    Cenário ${contador}
+                </div>
+
+                <button class="btn btn-secondary"
+                    onclick="removerCenario(${contador})">
+                    Remover
+                </button>
+
+            </div>
+
+            <div class="grid">
+
+                <div class="input-group">
+                    <label>Quantidade</label>
+                    <input type="number" class="qtd" value="15">
+                </div>
+
+                <div class="input-group">
+                    <label>Bolsa</label>
+                    <input type="number" class="bolsa" value="1400">
+                </div>
+
+            </div>
+
+            <div class="input-group">
+                <label>Transporte</label>
+                <input type="number" class="vt" value="250">
+            </div>
+
+        </div>
+
+    `;
+
+    document
+        .getElementById('cenarios')
+        .insertAdjacentHTML('beforeend',html);
+
+    bindInputs();
+    atualizar();
+
+}
+
+function removerCenario(id){
+
+    document.getElementById(`cenario-${id}`).remove();
+
+    atualizar();
+
+}
+
+function bindInputs(){
+
+    document.querySelectorAll('input').forEach(input=>{
+
+        input.oninput = atualizar;
+
+    });
+
+}
+
+function atualizar(){
+
+    const qtdAtual =
+        Number(document.getElementById('qtdAtual').value);
+
+    const bolsaAtual =
+        Number(document.getElementById('bolsaAtual').value);
+
+    const vtAtual =
+        Number(document.getElementById('vtAtual').value);
+
+    const custoAtual =
+        custo(qtdAtual,bolsaAtual,vtAtual);
+
+    const tbody =
+        document.getElementById('tabelaResultados');
+
+    tbody.innerHTML = "";
+
+    const labels = ['Atual'];
+    const valores = [custoAtual];
+
+    let maior = custoAtual;
+    let maiorImpacto = 0;
+
+    tbody.innerHTML += `
+
+        <tr>
+            <td><strong>Atual</strong></td>
+            <td>${qtdAtual}</td>
+            <td>${moeda(custoAtual)}</td>
+            <td>${moeda(custoAtual * 12)}</td>
+            <td>—</td>
+        </tr>
+
+    `;
+
+    document.querySelectorAll('.scenario').forEach((el,index)=>{
+
+        const qtd =
+            Number(el.querySelector('.qtd').value);
+
+        const bolsa =
+            Number(el.querySelector('.bolsa').value);
+
+        const vt =
+            Number(el.querySelector('.vt').value);
+
+        const mensal =
+            custo(qtd,bolsa,vt);
+
+        const impacto =
+            mensal - custoAtual;
+
+        if(mensal > maior){
+            maior = mensal;
+        }
+
+        if(impacto > maiorImpacto){
+            maiorImpacto = impacto;
+        }
+
+        labels.push(`Cenário ${index+1}`);
+        valores.push(mensal);
+
+        tbody.innerHTML += `
+
+            <tr>
+
+                <td>
+                    <strong>Cenário ${index+1}</strong>
+                </td>
+
+                <td>${qtd}</td>
+
+                <td>${moeda(mensal)}</td>
+
+                <td>${moeda(mensal * 12)}</td>
+
+                <td>
+
+                    <span class="badge ${
+                        impacto >= 0
+                        ? 'badge-up'
+                        : 'badge-down'
+                    }">
+
+                        ${
+                            impacto >= 0
+                            ? '+'
+                            : ''
+                        }
+
+                        ${moeda(impacto)}
+
+                    </span>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+    document.getElementById('kpiAtual').innerHTML =
+        moeda(custoAtual);
+
+    document.getElementById('kpiMaior').innerHTML =
+        moeda(maior);
+
+    document.getElementById('kpiImpacto').innerHTML =
+        moeda(maiorImpacto);
+
+    atualizarGrafico(labels,valores);
+
+}
+
+function atualizarGrafico(labels,valores){
+
+    const ctx =
+        document.getElementById('grafico');
+
+    if(chart){
+        chart.destroy();
+    }
+
+    chart = new Chart(ctx,{
+
+        type:'bar',
+
+        data:{
+            labels:labels,
+            datasets:[{
+                label:'Custo Mensal',
+                data:valores,
+                borderWidth:1,
+                borderRadius:10
+            }]
+        },
+
+        options:{
+            responsive:true,
+            plugins:{
+                legend:{
+                    display:false
+                }
+            },
+            scales:{
+                y:{
+                    beginAtZero:true
+                }
+            }
+        }
+
+    });
+
+}
+
+function salvarImagem(){
+
+    html2canvas(document.getElementById('impactoArea')).then(canvas=>{
+
+        const link = document.createElement('a');
+
+        link.download = 'impacto-financeiro.png';
+
+        link.href = canvas.toDataURL();
+
+        link.click();
+
+    });
+
+}
+
+adicionarCenario();
+adicionarCenario();
+
+</script>
+
+</body>
+</html>
