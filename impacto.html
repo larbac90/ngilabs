@@ -6,7 +6,6 @@
 
 <title>Estudo de Impacto Financeiro</title>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <style>
@@ -27,7 +26,7 @@ body{
 
 .container{
     display:grid;
-    grid-template-columns:520px 1fr;
+    grid-template-columns:500px 1fr;
     gap:24px;
     align-items:start;
 }
@@ -45,8 +44,11 @@ body{
     top:24px;
 }
 
+/* Modificado: Força fundo branco para evitar artefatos no html2canvas */
 .right-panel{
     padding:24px;
+    background: #ffffff;
+    border-radius:24px;
 }
 
 .header{
@@ -87,7 +89,7 @@ body{
     color:#334155;
 }
 
-input{
+input[type="number"], input[type="text"]{
     width:100%;
     padding:14px;
     border-radius:14px;
@@ -116,12 +118,13 @@ input:focus{
     justify-content:space-between;
     align-items:center;
     margin-bottom:16px;
+    gap:12px;
 }
 
-.scenario-title{
-    font-size:18px;
+.scenario-title-input{
     font-weight:700;
-    color:#2563eb;
+    font-size:16px;
+    background:white;
 }
 
 .btn{
@@ -154,8 +157,9 @@ input:focus{
     margin-top:20px;
 }
 
+/* Modificado: Força fundo branco para evitar vazamento do background cinza do body */
 .impact-area{
-    background:white;
+    background:#ffffff;
     border-radius:24px;
 }
 
@@ -170,7 +174,7 @@ input:focus{
 
 .kpis{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
     gap:18px;
     margin-bottom:28px;
 }
@@ -193,12 +197,12 @@ input:focus{
     font-weight:700;
 }
 
-.chart-card{
-    background:#f8fbff;
-    border:1px solid #dbe4ee;
-    border-radius:22px;
-    padding:24px;
-    margin-bottom:24px;
+.kpi-percent{
+    display:block;
+    margin-top:4px;
+    font-size:14px;
+    font-weight:700;
+    color:#475569;
 }
 
 .table-card{
@@ -225,6 +229,13 @@ td{
     padding:18px;
     border-top:1px solid #dbe4ee;
     background:white;
+    vertical-align:middle;
+}
+
+.row-disabled td {
+    background:#f8fafc;
+    color:#94a3b8;
+    opacity:0.6;
 }
 
 .badge{
@@ -236,13 +247,41 @@ td{
 }
 
 .badge-up{
-    background:#fee2e2;
-    color:#991b1b;
+    background:#f1f5f9;
+    color:#334155;
 }
 
 .badge-down{
     background:#dcfce7;
     color:#166534;
+}
+
+.percent{
+    display:block;
+    margin-top:6px;
+    font-size:14px;
+    font-weight:700;
+}
+
+.badge-up + .percent {
+    color:#475569;
+}
+
+.badge-down + .percent {
+    color:#166534;
+}
+
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #2563eb;
+}
+
+.td-cenario {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 @media(max-width:1200px){
@@ -264,15 +303,12 @@ td{
 
 <div class="container">
 
-    <!-- ESQUERDA -->
-
     <div class="card left-panel">
 
         <div class="header">
             <h1>📊 Estudo de Impacto</h1>
             <p>
-                Simulação financeira profissional para análise de cenários
-                de contratação de estagiários.
+                Simulação financeira para análise comparativa de cenários de estagiários.
             </p>
         </div>
 
@@ -281,17 +317,14 @@ td{
         </div>
 
         <div class="grid">
-
             <div class="input-group">
                 <label>Quantidade</label>
                 <input type="number" id="qtdAtual" value="10">
             </div>
-
             <div class="input-group">
                 <label>Bolsa (R$)</label>
                 <input type="number" id="bolsaAtual" value="1200">
             </div>
-
         </div>
 
         <div class="input-group">
@@ -306,109 +339,67 @@ td{
         <div id="cenarios"></div>
 
         <div class="actions">
-
-            <button class="btn btn-primary"
-                onclick="adicionarCenario()">
+            <button class="btn btn-primary" onclick="adicionarCenario()">
                 + Cenário
             </button>
-
         </div>
 
     </div>
-
-    <!-- DIREITA -->
 
     <div class="impact-area" id="impactoArea">
 
         <div class="card right-panel">
 
             <div class="impact-header">
-
                 <div>
-                    <h1 style="font-size:32px;">
-                        📈 Comparativo de Impacto
+                    <h1 style="font-size:30px;">
+                        📈 Comparativo Financeiro
                     </h1>
-
                     <p style="color:#64748b;margin-top:6px;">
-                        Comparação financeira entre o cenário atual e projeções futuras.
+                        Estudo comparativo entre o cenário atual e projeções futuras selecionadas.
                     </p>
                 </div>
-
-                <button class="btn btn-primary"
-                    onclick="salvarImagem()">
+                <button class="btn btn-primary" onclick="salvarImagem()">
                     🖼️ Salvar Imagem
                 </button>
-
             </div>
-
-            <!-- KPIS -->
 
             <div class="kpis">
 
                 <div class="kpi">
-                    <div class="kpi-label">
-                        Custo Atual Mensal
-                    </div>
-
-                    <div class="kpi-value" id="kpiAtual">
-                        R$ 0
-                    </div>
+                    <div class="kpi-label">Custo Atual Mensal</div>
+                    <div class="kpi-value" id="kpiAtual">R$ 0</div>
+                    <div class="kpi-percent">—</div>
                 </div>
 
                 <div class="kpi">
-                    <div class="kpi-label">
-                        Maior Cenário
-                    </div>
-
-                    <div class="kpi-value" id="kpiMaior">
-                        R$ 0
-                    </div>
+                    <div class="kpi-label">Maior Projeção Mensal</div>
+                    <div class="kpi-value" id="kpiMaior">R$ 0</div>
+                    <div class="kpi-percent" id="kpiMaiorPercent">+0,0%</div>
                 </div>
 
                 <div class="kpi">
-                    <div class="kpi-label">
-                        Impacto Máximo
-                    </div>
-
-                    <div class="kpi-value" id="kpiImpacto">
-                        R$ 0
-                    </div>
+                    <div class="kpi-label">Maior Projeção Anual</div>
+                    <div class="kpi-value" id="kpiAnual">R$ 0</div>
+                    <div class="kpi-percent" id="kpiAnualPercent">+0,0%</div>
                 </div>
 
             </div>
-
-            <!-- GRAFICO -->
-
-            <div class="chart-card">
-
-                <div style="font-size:18px;font-weight:700;margin-bottom:20px;">
-                    Evolução dos Custos Mensais
-                </div>
-
-                <canvas id="grafico"></canvas>
-
-            </div>
-
-            <!-- TABELA -->
 
             <div class="table-card">
-
                 <table>
-
                     <thead>
                         <tr>
-                            <th>Cenário</th>
+                            <th>Análise / Cenário</th>
                             <th>Qtd.</th>
-                            <th>Custo Mensal</th>
-                            <th>Custo Anual</th>
-                            <th>Impacto</th>
+                            <th>Mensal</th>
+                            <th>Impacto Mensal</th>
+                            <th>Anual</th>
+                            <th>Impacto Anual</th>
                         </tr>
                     </thead>
-
                     <tbody id="tabelaResultados"></tbody>
-
                 </table>
-
             </div>
 
         </div>
@@ -420,267 +411,202 @@ td{
 <script>
 
 let contador = 0;
-let chart;
+let cenariosSelecionados = {};
 
 function moeda(valor){
-
     return valor.toLocaleString('pt-BR',{
         style:'currency',
         currency:'BRL'
     });
+}
 
+function porcentagem(valor){
+    return (valor >= 0 ? '+' : '') + valor.toFixed(1).replace('.',',') + '%';
 }
 
 function custo(qtd, bolsa, vt){
-
     return qtd * (bolsa + vt);
-
 }
 
 function adicionarCenario(){
-
     contador++;
+    const idAtual = contador;
+    cenariosSelecionados[idAtual] = true;
 
     const html = `
-
-        <div class="scenario" id="cenario-${contador}">
-
+        <div class="scenario" id="cenario-${idAtual}">
             <div class="scenario-header">
-
-                <div class="scenario-title">
-                    Cenário ${contador}
-                </div>
-
-                <button class="btn btn-secondary"
-                    onclick="removerCenario(${contador})">
+                <input
+                    type="text"
+                    class="scenario-title-input"
+                    value="Cenário ${idAtual}"
+                    data-id="${idAtual}"
+                >
+                <button class="btn btn-secondary" onclick="removerCenario(${idAtual})">
                     Remover
                 </button>
-
             </div>
-
             <div class="grid">
-
                 <div class="input-group">
                     <label>Quantidade</label>
                     <input type="number" class="qtd" value="15">
                 </div>
-
                 <div class="input-group">
                     <label>Bolsa</label>
                     <input type="number" class="bolsa" value="1400">
                 </div>
-
             </div>
-
             <div class="input-group">
                 <label>Transporte</label>
                 <input type="number" class="vt" value="250">
             </div>
-
         </div>
-
     `;
 
-    document
-        .getElementById('cenarios')
-        .insertAdjacentHTML('beforeend',html);
-
+    document.getElementById('cenarios').insertAdjacentHTML('beforeend',html);
     bindInputs();
     atualizar();
-
 }
 
 function removerCenario(id){
-
     document.getElementById(`cenario-${id}`).remove();
-
+    delete cenariosSelecionados[id];
     atualizar();
+}
 
+function alternarSelecao(id) {
+    cenariosSelecionados[id] = document.getElementById(`chk-${id}`).checked;
+    atualizar();
 }
 
 function bindInputs(){
-
-    document.querySelectorAll('input').forEach(input=>{
-
+    document.querySelectorAll('.scenario input').forEach(input=>{
         input.oninput = atualizar;
-
     });
-
+    document.getElementById('qtdAtual').oninput = atualizar;
+    document.getElementById('bolsaAtual').oninput = atualizar;
+    document.getElementById('vtAtual').oninput = atualizar;
 }
 
 function atualizar(){
+    const qtdAtual = Number(document.getElementById('qtdAtual').value);
+    const bolsaAtual = Number(document.getElementById('bolsaAtual').value);
+    const vtAtual = Number(document.getElementById('vtAtual').value);
 
-    const qtdAtual =
-        Number(document.getElementById('qtdAtual').value);
+    const custoAtual = custo(qtdAtual,bolsaAtual,vtAtual);
+    const anualAtual = custoAtual * 12;
 
-    const bolsaAtual =
-        Number(document.getElementById('bolsaAtual').value);
-
-    const vtAtual =
-        Number(document.getElementById('vtAtual').value);
-
-    const custoAtual =
-        custo(qtdAtual,bolsaAtual,vtAtual);
-
-    const tbody =
-        document.getElementById('tabelaResultados');
-
+    const tbody = document.getElementById('tabelaResultados');
     tbody.innerHTML = "";
 
-    const labels = ['Atual'];
-    const valores = [custoAtual];
-
-    let maior = custoAtual;
-    let maiorImpacto = 0;
+    let maiorMensal = custoAtual;
+    let maiorAnual = anualAtual;
 
     tbody.innerHTML += `
-
         <tr>
-            <td><strong>Atual</strong></td>
+            <td>
+                <div class="td-cenario">
+                    <input type="checkbox" checked disabled>
+                    <strong>Atual</strong>
+                </div>
+            </td>
             <td>${qtdAtual}</td>
             <td>${moeda(custoAtual)}</td>
-            <td>${moeda(custoAtual * 12)}</td>
+            <td>—</td>
+            <td>${moeda(anualAtual)}</td>
             <td>—</td>
         </tr>
-
     `;
 
-    document.querySelectorAll('.scenario').forEach((el,index)=>{
+    document.querySelectorAll('.scenario').forEach((el)=>{
+        const titleInput = el.querySelector('.scenario-title-input');
+        const id = titleInput.getAttribute('data-id');
+        const nome = titleInput.value;
 
-        const qtd =
-            Number(el.querySelector('.qtd').value);
+        const qtd = Number(el.querySelector('.qtd').value);
+        const bolsa = Number(el.querySelector('.bolsa').value);
+        const vt = Number(el.querySelector('.vt').value);
 
-        const bolsa =
-            Number(el.querySelector('.bolsa').value);
+        const mensal = custo(qtd,bolsa,vt);
+        const anual = mensal * 12;
 
-        const vt =
-            Number(el.querySelector('.vt').value);
+        const impactoMensal = mensal - custoAtual;
+        const impactoAnual = anual - anualAtual;
 
-        const mensal =
-            custo(qtd,bolsa,vt);
+        const percentualMensal = custoAtual > 0 ? (impactoMensal / custoAtual) * 100 : 0;
+        const percentualAnual = anualAtual > 0 ? (impactoAnual / anualAtual) * 100 : 0;
 
-        const impacto =
-            mensal - custoAtual;
+        const estaAtivo = cenariosSelecionados[id];
 
-        if(mensal > maior){
-            maior = mensal;
+        if(estaAtivo){
+            if(mensal > maiorMensal) maiorMensal = mensal;
+            if(anual > maiorAnual) maiorAnual = anual;
         }
-
-        if(impacto > maiorImpacto){
-            maiorImpacto = impacto;
-        }
-
-        labels.push(`Cenário ${index+1}`);
-        valores.push(mensal);
 
         tbody.innerHTML += `
-
-            <tr>
-
+            <tr class="${estaAtivo ? '' : 'row-disabled'}">
                 <td>
-                    <strong>Cenário ${index+1}</strong>
+                    <div class="td-cenario">
+                        <input 
+                            type="checkbox" 
+                            id="chk-${id}" 
+                            ${estaAtivo ? 'checked' : ''} 
+                            onclick="alternarSelecao(${id})"
+                        >
+                        <strong>${nome}</strong>
+                    </div>
                 </td>
-
                 <td>${qtd}</td>
-
                 <td>${moeda(mensal)}</td>
-
-                <td>${moeda(mensal * 12)}</td>
-
                 <td>
-
-                    <span class="badge ${
-                        impacto >= 0
-                        ? 'badge-up'
-                        : 'badge-down'
-                    }">
-
-                        ${
-                            impacto >= 0
-                            ? '+'
-                            : ''
-                        }
-
-                        ${moeda(impacto)}
-
+                    <span class="badge ${impactoMensal >= 0 ? 'badge-up' : 'badge-down'}">
+                        ${moeda(impactoMensal)}
                     </span>
-
+                    <span class="percent">${porcentagem(percentualMensal)}</span>
                 </td>
-
+                <td>${moeda(anual)}</td>
+                <td>
+                    <span class="badge ${impactoAnual >= 0 ? 'badge-up' : 'badge-down'}">
+                        ${moeda(impactoAnual)}
+                    </span>
+                    <span class="percent">${porcentagem(percentualAnual)}</span>
+                </td>
             </tr>
-
         `;
-
     });
 
-    document.getElementById('kpiAtual').innerHTML =
-        moeda(custoAtual);
+    const aumentoMaiorMensal = maiorMensal - custoAtual;
+    const aumentoMaiorAnual = maiorAnual - anualAtual;
 
-    document.getElementById('kpiMaior').innerHTML =
-        moeda(maior);
+    const pMaiorMensal = custoAtual > 0 ? (aumentoMaiorMensal / custoAtual) * 100 : 0;
+    const pMaiorAnual = anualAtual > 0 ? (aumentoMaiorAnual / anualAtual) * 100 : 0;
 
-    document.getElementById('kpiImpacto').innerHTML =
-        moeda(maiorImpacto);
+    document.getElementById('kpiAtual').innerHTML = moeda(custoAtual);
+    
+    document.getElementById('kpiMaior').innerHTML = moeda(maiorMensal);
+    document.getElementById('kpiMaiorPercent').innerHTML = porcentagem(pMaiorMensal) + ' em relação ao atual';
 
-    atualizarGrafico(labels,valores);
-
-}
-
-function atualizarGrafico(labels,valores){
-
-    const ctx =
-        document.getElementById('grafico');
-
-    if(chart){
-        chart.destroy();
-    }
-
-    chart = new Chart(ctx,{
-
-        type:'bar',
-
-        data:{
-            labels:labels,
-            datasets:[{
-                label:'Custo Mensal',
-                data:valores,
-                borderWidth:1,
-                borderRadius:10
-            }]
-        },
-
-        options:{
-            responsive:true,
-            plugins:{
-                legend:{
-                    display:false
-                }
-            },
-            scales:{
-                y:{
-                    beginAtZero:true
-                }
-            }
-        }
-
-    });
-
+    document.getElementById('kpiAnual').innerHTML = moeda(maiorAnual);
+    document.getElementById('kpiAnualPercent').innerHTML = porcentagem(pMaiorAnual) + ' em relação ao atual';
 }
 
 function salvarImagem(){
+    const target = document.getElementById('impactoArea');
+    
+    // Configurações avançadas para remover bugs de gradiente e herança do body
+    const opcoes = {
+        backgroundColor: '#ffffff', // Substitui os "vazios" por branco sólido
+        scale: 2,                  // Aumenta a definição geral do print
+        logging: false,
+        useCORS: true
+    };
 
-    html2canvas(document.getElementById('impactoArea')).then(canvas=>{
-
+    html2canvas(target, opcoes).then(canvas=>{
         const link = document.createElement('a');
-
         link.download = 'impacto-financeiro.png';
-
-        link.href = canvas.toDataURL();
-
+        link.href = canvas.toDataURL('image/png');
         link.click();
-
     });
-
 }
 
 adicionarCenario();
