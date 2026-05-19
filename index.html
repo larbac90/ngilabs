@@ -36,6 +36,7 @@
             max-width: 700px;
             height: auto;
             display: block;
+            margin-top: -80px;
         }
 
         /* Container Central Azul Petróleo */
@@ -98,6 +99,43 @@
         .icon {
             font-size: 2.5rem;
         }
+
+        /* Rodapé Institucional */
+        footer {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            text-align: center;
+        }
+
+        .footer-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .footer-logo {
+            height: 45px; /* Tamanho controlado para manter a elegância */
+            width: auto;
+            display: block;
+            opacity: 0.85;
+            transition: opacity 0.2s;
+        }
+
+        .footer-logo:hover {
+            opacity: 1;
+        }
+
+        .footer-text {
+            color: #64748b;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+        }
     </style>
 </head>
 <body>
@@ -131,6 +169,15 @@
             </a>
         </div>
     </main>
+
+    <!-- NOVO: Rodapé posicionado fora e abaixo do container principal -->
+    <footer>
+        <div class="footer-logos">
+            <img src="https://i.ibb.co/FkLCjrFV/Capturar-removebg-preview-1.png" class="footer-logo" alt="Logo 1"> 
+            <img src="https://i.ibb.co/yc32bwv5/Logo-DGF-upscaled-Photoroom.png" class="footer-logo" alt="Logo DGF">
+        </div>
+        <div class="footer-text">DGF • NUGOV • TJPE</div>
+    </footer>
 
 </body>
 </html>
