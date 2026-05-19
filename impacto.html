@@ -326,6 +326,8 @@ td{
                     <thead>
                         <tr>
                             <th>Análise / Cenário</th>
+                            <th>Bolsa</th>
+                            <th>Aux. V.T.</th>
                             <th>Qtd.</th>
                             <th>Mensal</th>
                             <th>Impacto Mensal</th>
@@ -341,6 +343,8 @@ td{
                                     <strong id="cellNomeAtual" style="font-size: 16px;">Atual</strong>
                                 </div>
                             </td>
+                            <td id="cellBolsaAtual">R$ 0,00</td>
+                            <td id="cellVtAtual">R$ 0,00</td>
                             <td id="cellQtdAtual">0</td>
                             <td id="cellMensalAtual">R$ 0,00</td>
                             <td>—</td>
@@ -423,9 +427,7 @@ function bindInputs(){
         input.oninput = atualizar;
     });
     
-    // O input de texto do nome atual no menu esquerdo dispara a atualização da tabela
     document.getElementById('nomeAtualInput').oninput = atualizar;
-    
     document.getElementById('qtdAtual').oninput = atualizar;
     document.getElementById('bolsaAtual').oninput = atualizar;
     document.getElementById('vtAtual').oninput = atualizar;
@@ -440,19 +442,21 @@ function atualizar(){
     const custoAtual = custo(qtdAtual,bolsaAtual,vtAtual);
     const anualAtual = custoAtual * 12;
 
-    // Atualiza dinamicamente o texto do nome e os valores numéricos na primeira linha
+    // Atualiza valores do cenário atual base
     document.getElementById('cellNomeAtual').innerText = nomeAtual || "Atual";
+    document.getElementById('cellBolsaAtual').innerText = moeda(bolsaAtual);
+    document.getElementById('cellVtAtual').innerText = moeda(vtAtual);
     document.getElementById('cellQtdAtual').innerText = qtdAtual;
     document.getElementById('cellMensalAtual').innerText = moeda(custoAtual);
     document.getElementById('cellAnualAtual').innerText = moeda(anualAtual);
 
     const tbody = document.getElementById('tabelaResultados');
-    // Remove apenas as linhas extras simuladas do histórico anterior
+    // Remove as linhas dinâmicas antigas mantendo a do cenário atual
     while (tbody.rows.length > 1) {
         tbody.deleteRow(1);
     }
 
-    // Adiciona as novas linhas com base nos componentes clonados na esquerda
+    // Renderiza os novos cenários simulados
     document.querySelectorAll('.scenario').forEach((el)=>{
         const titleInput = el.querySelector('.scenario-title-input');
         const nome = titleInput.value;
@@ -476,8 +480,9 @@ function atualizar(){
                         <strong>${nome}</strong>
                     </div>
                 </td>
-                <td>${qtd}</td>
-                <td>${moeda(mensal)}</td>
+                <td>${moeda(bolsa)}</td>
+                <td>${moeda(vt)}</td>
+                <td>—</td> <td>${moeda(mensal)}</td>
                 <td>
                     <span class="badge ${impactoMensal >= 0 ? 'badge-up' : 'badge-down'}">
                         ${moeda(impactoMensal)}
