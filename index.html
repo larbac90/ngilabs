@@ -13,7 +13,8 @@
         }
 
         body {
-            background-color: #ffffff;
+            /* Fundo 5% mais escuro que o branco original */
+            background-color: #f2f2f2;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -26,24 +27,35 @@
             width: 100%;
             display: flex;
             justify-content: center;
-            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
         }
 
         .logo {
-            /* ALTERAÇÃO: Logo maior, conforme solicitado */
-            max-width: 500px; /* Era 250px */
+            /* Mantida em 700px conforme pedido anteriormente */
+            max-width: 700px;
             height: auto;
+            display: block;
         }
 
         /* Container Central Azul Petróleo */
         .container-projetos {
-            background-color: #004d61; /* Azul Petróleo */
+            /* Efeito Glassmorphism e Sombra */
+            background-color: rgba(0, 77, 97, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 77, 97, 0.25), 0 5px 15px rgba(0, 0, 0, 0.1);
+            
             width: 100%;
             max-width: 800px;
             padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
+            position: relative;
+            z-index: 1;
+
+            /* ALTERAÇÃO: Sobe o container sem mover a logo do lugar */
+            margin-top: -120px; 
         }
 
         .container-projetos h1 {
@@ -96,7 +108,7 @@
 
     <main class="container-projetos">
         <h1>Projetos</h1>
-        
+         
         <div class="grid-links">
             <a href="organomaker.html" class="card-link">
                 <span class="icon">📊</span>
@@ -111,6 +123,11 @@
             <a href="https://larbac90.github.io/contracheck" class="card-link">
                 <span class="icon">💵</span>
                 <span>ContraCHECK</span>
+            </a>
+
+            <a href="impacto.html" class="card-link">
+                <span class="icon">🧑‍🎓</span>
+                <span>Impacto - Estagiários</span>
             </a>
         </div>
     </main>
