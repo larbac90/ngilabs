@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGI Labs - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Topo Centralizado com o meio */
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            /* ALTERAÇÃO: Logo maior, conforme solicitado */
+            max-width: 500px; /* Era 250px */
+            height: auto;
+        }
+
+        /* Container Central Azul Petróleo */
+        .container-projetos {
+            background-color: #004d61; /* Azul Petróleo */
+            width: 100%;
+            max-width: 800px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .container-projetos h1 {
+            color: #ffffff;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        /* Grid das Caixinhas */
+        .grid-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        /* Caixinhas Brancas com Letras Azuis */
+        .card-link {
+            background-color: #ffffff;
+            color: #004d61;
+            text-decoration: none;
+            padding: 30px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Estilização dos Ícones/Figurinhas */
+        .icon {
+            font-size: 2.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://i.ibb.co/GQDcvHsz/Chat-GPT-Image-19-de-mai-de-2026-11-06-18-Photoroom.png" alt="NGI Labs Logo" class="logo">
+    </header>
+
+    <main class="container-projetos">
+        <h1>Projetos</h1>
+        
+        <div class="grid-links">
+            <a href="organomaker.html" class="card-link">
+                <span class="icon">📊</span>
+                <span>Organomaker</span>
+            </a>
+
+            <a href="fluxomaker.html" class="card-link">
+                <span class="icon">⚙️</span>
+                <span>Fluxomaker</span>
+            </a>
+
+            <a href="https://larbac90.github.io/contracheck" class="card-link">
+                <span class="icon">💵</span>
+                <span>ContraCHECK</span>
+            </a>
+        </div>
+    </main>
+
+</body>
+</html>
