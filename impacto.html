@@ -141,14 +141,15 @@ input:focus{
     border-color: #cbd5e1;
 }
 
+/* Visual original dos botões da aplicação */
 .btn{
     border:none;
-    border-radius:12px;
-    padding:12px 18px;
+    border-radius:14px;
+    padding:14px 18px;
     font-weight:600;
     cursor:pointer;
     transition:0.2s;
-    font-size:14px;
+    font-size:15px;
 }
 
 .btn-primary{
@@ -156,12 +157,11 @@ input:focus{
     color:white;
     width: 100%;
     margin-top:8px;
-    box-shadow: 0 4px 12px rgba(37,99,235,0.15);
 }
 
 .btn-primary:hover{
-    background:#1d4ed8;
-    transform: translateY(-1px);
+    transform:translateY(-1px);
+    box-shadow:0 10px 20px rgba(37,99,235,0.18);
 }
 
 .btn-secondary{
@@ -177,18 +177,20 @@ input:focus{
     color:#0f172a;
 }
 
+/* Barra superior alinhada perfeitamente no esquadro do painel direito */
+.toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
 .impact-area{
-    background:#ffffff;
-    border-radius:24px;
+    background: transparent;
 }
 
 .impact-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
     margin-bottom:28px;
-    flex-wrap:wrap;
-    gap:16px;
 }
 
 .table-card{
@@ -307,18 +309,21 @@ td{
         </button>
     </div>
 
-    <div class="impact-area" id="impactoArea">
-        <div class="card right-panel">
+    <div class="impact-area">
+        
+        <div class="toolbar">
+            <button class="btn btn-primary" style="width: auto; margin-top: 0;" onclick="salvarImagem()">
+                🖼️ Salvar Imagem
+            </button>
+        </div>
+
+        <div class="card right-panel" id="areaCaptura">
+            
             <div class="impact-header">
-                <div>
-                    <h1 style="font-size:30px;">📈 Comparativo Financeiro</h1>
-                    <p style="color:#64748b;margin-top:6px;">
-                        Estudo comparativo entre o cenário atual e projeções futuras simuladas.
-                    </p>
-                </div>
-                <button class="btn btn-primary" onclick="salvarImagem()">
-                    🖼️ Salvar Imagem
-                </button>
+                <h1 style="font-size:30px;">📈 Comparativo Financeiro</h1>
+                <p style="color:#64748b;margin-top:6px;">
+                    Estudo comparativo entre o cenário atual e projeções futuras simuladas.
+                </p>
             </div>
 
             <div class="table-card">
@@ -442,7 +447,6 @@ function atualizar(){
     const custoAtual = custo(qtdAtual,bolsaAtual,vtAtual);
     const anualAtual = custoAtual * 12;
 
-    // Atualiza valores do cenário atual base
     document.getElementById('cellNomeAtual').innerText = nomeAtual || "Atual";
     document.getElementById('cellBolsaAtual').innerText = moeda(bolsaAtual);
     document.getElementById('cellVtAtual').innerText = moeda(vtAtual);
@@ -451,12 +455,10 @@ function atualizar(){
     document.getElementById('cellAnualAtual').innerText = moeda(anualAtual);
 
     const tbody = document.getElementById('tabelaResultados');
-    // Remove as linhas dinâmicas antigas mantendo a do cenário atual
     while (tbody.rows.length > 1) {
         tbody.deleteRow(1);
     }
 
-    // Renderiza os novos cenários simulados
     document.querySelectorAll('.scenario').forEach((el)=>{
         const titleInput = el.querySelector('.scenario-title-input');
         const nome = titleInput.value;
@@ -482,7 +484,8 @@ function atualizar(){
                 </td>
                 <td>${moeda(bolsa)}</td>
                 <td>${moeda(vt)}</td>
-                <td>—</td> <td>${moeda(mensal)}</td>
+                <td>—</td>
+                <td>${moeda(mensal)}</td>
                 <td>
                     <span class="badge ${impactoMensal >= 0 ? 'badge-up' : 'badge-down'}">
                         ${moeda(impactoMensal)}
@@ -506,7 +509,8 @@ function atualizar(){
 }
 
 function salvarImagem(){
-    const target = document.getElementById('impactoArea');
+    // Mantendo a captura limpa apenas da div com as tabelas
+    const target = document.getElementById('areaCaptura');
     
     const opcoes = {
         backgroundColor: '#ffffff', 
@@ -523,7 +527,6 @@ function salvarImagem(){
     });
 }
 
-// Inicializações padrão da página
 adicionarCenario();
 adicionarCenario();
 
