@@ -144,13 +144,13 @@
             font-size: 1.4rem;
         }
 
-        /* LOGICA DE ATIVAÇÃO VIA CSS (Quando o checkbox está marcado) */
+        /* LOGICA DE ATIVAÇÃO VIA CSS */
         .secao-toggle:checked ~ .secao-conteudo {
-            max-height: 1000px; /* Altura máxima grande o suficiente para o conteúdo */
+            max-height: 1000px;
         }
 
         .secao-toggle:checked ~ .secao-header::after {
-            transform: rotate(180deg); /* Gira a seta para cima */
+            transform: rotate(180deg);
         }
 
         /* Rodapé Institucional */
@@ -198,10 +198,13 @@
         <img src="https://i.ibb.co/GQDcvHsz/Chat-GPT-Image-19-de-mai-de-2026-11-06-18-Photoroom.png" alt="NGI Labs Logo" class="logo">
     </header>
 
+    <main class="container-projetos">
+
         <h1>Dashboards Power BI</h1>
          
         <div class="secao-retratil">
-            <input type="checkbox" id="secao-gestao" class="secao-toggle" checked> <label for="secao-gestao" class="secao-header">
+            <input type="checkbox" id="secao-gestao" class="secao-toggle" checked> 
+            <label for="secao-gestao" class="secao-header">
                 📊 Gestão Estratégica
             </label>
             <div class="secao-conteudo">
@@ -251,11 +254,11 @@
                     <a href="https://app.powerbi.com/view?r=eyJrIjoiMzliOThjOWEtYWQwMy00YzYzLWI1ZDEtYTk0ODIzMGFkMzEyIiwidCI6IjgxMzczZDliLTYwN2EtNDY0Mi1iYTc0LWVjMWVlNDQ0ZDY5ZSJ9" target="_blank" class="card-dashboard">
                         <span class="dash-icon">📝</span>
                         <span>Saldo das Funçoes</span>
-                   </a>
-                   <a href="https://app.powerbi.com/view?r=eyJrIjoiMWM4NjIxZTgtZWZkNC00NWVhLThmNzctMjFmYzQxNjY2Yjg1IiwidCI6IjgxMzczZDliLTYwN2EtNDY0Mi1iYTc0LWVjMWVlNDQ0ZDY5ZSJ9" target="_blank" class="card-dashboard">
+                    </a>
+                    <a href="https://app.powerbi.com/view?r=eyJrIjoiMWM4NjIxZTgtZWZkNC00NWVhLThmNzctMjFmYzQxNjY2Yjg1IiwidCI6IjgxMzczZDliLTYwN2EtNDY0Mi1iYTc0LWVjMWVlNDQ0ZDY5ZSJ9" target="_blank" class="card-dashboard">
                         <span class="dash-icon">👨🏻‍💻</span>
                         <span>Geral das Funções</span>
-                   </a>
+                    </a>
                 </div>
             </div>
         </div>
@@ -274,7 +277,6 @@
                 </div>
             </div>
         </div>
-
 
     </main>
 
