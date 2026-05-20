@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGI Labs - Painel de Controle</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            /* Fundo 5% mais escuro que o branco original, mantendo a consistência */
+            background-color: #f2f2f2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Topo Centralizado com o meio */
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            max-width: 700px;
+            height: auto;
+            display: block;
+            margin-top: -80px;
+        }
+
+        /* Container Central Azul Petróleo (Efeito Glassmorphism) */
+        .container-projetos {
+            background-color: rgba(0, 77, 97, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 77, 97, 0.25), 0 5px 15px rgba(0, 0, 0, 0.1);
+            
+            width: 100%;
+            max-width: 800px;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+
+            /* Sobe o container sem mover a logo do lugar */
+            margin-top: -120px; 
+        }
+
+        .container-projetos h1 {
+            color: #ffffff;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        /* Grid ajustado para 2 botões grandes lado a lado */
+        .grid-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        /* Caixinhas Brancas com Letras Azuis */
+        .card-link {
+            background-color: #ffffff;
+            color: #004d61;
+            text-decoration: none;
+            padding: 40px 20px; /* Um pouco mais de respiro por serem apenas 2 botões */
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.25rem; /* Fonte ligeiramente maior para dar destaque */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Estilização dos Ícones */
+        .icon {
+            font-size: 3rem; /* Ícones ligeiramente maiores para preencher melhor o espaço */
+        }
+
+        /* Rodapé Institucional */
+        footer {
+            margin-top: auto; /* Garante que o rodapé fique embaixo mesmo em telas grandes */
+            padding-top: 40px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            text-align: center;
+        }
+
+        .footer-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .footer-logo {
+            height: 45px;
+            width: auto;
+            display: block;
+            opacity: 0.85;
+            transition: opacity 0.2s;
+        }
+
+        .footer-logo:hover {
+            opacity: 1;
+        }
+
+        .footer-text {
+            color: #64748b;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://i.ibb.co/GQDcvHsz/Chat-GPT-Image-19-de-mai-de-2026-11-06-18-Photoroom.png" alt="NGI Labs Logo" class="logo">
+    </header>
+
+    <main class="container-projetos">
+        <h1>Selecione o Painel</h1>
+         
+        <div class="grid-links">
+            <a href="apps.html" class="card-link">
+                <span class="icon">📱</span>
+                <span>Aplicativos</span>
+            </a>
+
+            <a href="https://app.powerbi.com/" class="card-link" target="_blank">
+                <span class="icon">📶</span>
+                <span>Dashboards</span>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-logos">
+            <img src="https://i.ibb.co/FkLCjrFV/Capturar-removebg-preview-1.png" class="footer-logo" alt="Logo 1"> 
+            <img src="https://i.ibb.co/yc32bwv5/Logo-DGF-upscaled-Photoroom.png" class="footer-logo" alt="Logo DGF">
+        </div>
+        <div class="footer-text">DGF • NUGOV • TJPE</div>
+    </footer>
+
+</body>
+</html>
