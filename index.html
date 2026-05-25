@@ -36,7 +36,7 @@
             max-width: 700px;
             height: auto;
             display: block;
-            margin-top: -6vw; /* Torna a margem superior dinâmica baseada na largura da tela */
+            margin-top: 0; /* Removido o valor negativo para não cortar no topo */
         }
 
         /* Container Central Azul Petróleo (Efeito Glassmorphism) */
@@ -52,8 +52,8 @@
             text-align: center;
             position: relative;
             z-index: 1;
-            /* Sobe o container sem mover a logo do lugar */
-            margin-top: -120px; 
+            /* Ajustado para se posicionar logo abaixo do cabeçalho com um espaçamento agradável */
+            margin-top: 20px; 
         }
 
         .container-projetos h1 {
