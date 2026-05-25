@@ -32,10 +32,11 @@
         }
 
         .logo {
+            width: 100%;
             max-width: 700px;
             height: auto;
             display: block;
-            margin-top: -80px;
+            margin-top: -6vw; /* Torna a margem superior dinâmica baseada na largura da tela */
         }
 
         /* Container Central Azul Petróleo (Efeito Glassmorphism) */
@@ -44,7 +45,6 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 15px 35px rgba(0, 77, 97, 0.25), 0 5px 15px rgba(0, 0, 0, 0.1);
-            
             width: 100%;
             max-width: 800px;
             padding: 40px;
@@ -52,7 +52,6 @@
             text-align: center;
             position: relative;
             z-index: 1;
-
             /* Sobe o container sem mover a logo do lugar */
             margin-top: -120px; 
         }
@@ -144,8 +143,7 @@
     </header>
 
     <main class="container-projetos">
-        <h1></h1>
-         
+        <h1></h1>                 
         <div class="grid-links">
             <a href="apps.html" class="card-link">
                 <span class="icon">📱</span>
