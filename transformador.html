@@ -280,4 +280,172 @@
         {s: "FAP-AJ1G", v: 635.36}, {s: "FAT", v: 2102.28}, {s: "FATUJ", v: 8045.93}, 
         {s: "FGAGD", v: 8268.36}, {s: "FGAI", v: 2462.9}, {s: "FGAM", v: 3078.65}, 
         {s: "FGASCPR", v: 9108.41}, {s: "FGATCPR", v: 8433.72}, {s: "FGCCRC", v: 7994.07}, 
-        {s:
+        {s: "FGCJ-1", v: 1944.39}, {s: "FGCNCPR", v: 3997.02}, {s: "FGCNPR", v: 5060.17}, 
+        {s: "FGCNRC", v: 7994.07}, {s: "FGCNSC", v: 1944.39}, {s: "FGCNSPR", v: 3997.02}, 
+        {s: "FGCSJ-1", v: 3534.76}, {s: "FGCSJD", v: 3997.02}, {s: "FGDEGD", v: 8268.36}, 
+        {s: "FGDEPR", v: 7994.07}, {s: "FGDGD", v: 8929.83}, {s: "FGDPR", v: 8633.58}, 
+        {s: "FGDR", v: 8633.58}, {s: "FGGC", v: 1441.36}, {s: "FGGPE-1", v: 8633.58}, 
+        {s: "FGGPE-2", v: 3997.02}, {s: "FGGPE-3", v: 2102.28}, {s: "FGGUJ-1", v: 1441.36}, 
+        {s: "FGGUE", v: 3997.02}, {s: "FGGUE-2", v: 1441.36}, {s: "FGJ-1", v: 2102.28}, 
+        {s: "FGJ-2", v: 1501.62}, {s: "FGJ-3", v: 1051.13}, {s: "FGMN-1", v: 1861.5}, 
+        {s: "FGNCON", v: 3078.65}, {s: "FGNDM-1", v: 3078.65}, {s: "FGNDM-2", v: 1441.36}, 
+        {s: "FGNDR", v: 3534.76}, {s: "FGSCPR", v: 10795.26}, {s: "FGSCRC", v: 3997.02}, 
+        {s: "FGSECPR", v: 10120.47}, {s: "FGSNRC", v: 3997.02}, {s: "FGSPR", v: 3997.02}, 
+        {s: "FGSS", v: 2474}, {s: "FJCP", v: 2295.26}, {s: "FLJ-1", v: 1201.24}, 
+        {s: "FMT", v: 1051.13}, {s: "FSJ-1", v: 1201.24}, {s: "FSJ-3", v: 1201.24}, {s: "RG", v: 2462.9}
+    ];
+
+    function formatarMoeda(valor) {
+        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    // Gera o HTML interno do Select com base em um filtro ("comissionado", "funcao" ou "todos")
+    function gerarOptionsCargos(filtro = "todos") {
+        let html = '<option value="0" data-valor="0" data-tipo="nenhum">Selecione...</option>';
+        
+        if (filtro === "todos" || filtro === "comissionado") {
+            html += '<optgroup label="Cargos Comissionados">';
+            comissionadosData.forEach(c => {
+                html += `<option value="${c.s}" data-valor="${c.r}" data-tipo="comissionado">💼 ${c.s} (${formatarMoeda(c.r * FATOR_ATUALIZACAO)})</option>`;
+            });
+            html += '</optgroup>';
+        }
+
+        if (filtro === "todos" || filtro === "funcao") {
+            html += '<optgroup label="Funções Gratificadas">';
+            funcoesGratificadasData.forEach(f => {
+                html += `<option value="${f.s}" data-valor="${f.v}" data-tipo="funcao">🎗️ ${f.s} (${formatarMoeda(f.v * FATOR_ATUALIZACAO)})</option>`;
+            });
+            html += '</optgroup>';
+        }
+
+        return html;
+    }
+
+    function adicionarLinha(tipo) {
+        const container = document.getElementById(`container-${tipo}`);
+        const div = document.createElement('div');
+        div.className = 'linha-cargo';
+        
+        // Verifica se já existe uma trava ativa para aplicar a mesma estrutura
+        const filtroAtual = obterFiltroTrava();
+        const optionsHTML = (tipo === 'destino') ? gerarOptionsCargos(filtroAtual) : gerarOptionsCargos('todos');
+
+        div.innerHTML = `
+            <input type="number" class="qtd-${tipo}" value="1" min="1" oninput="calcularTransformacao()">
+            <select class="tipo-${tipo}" onchange="gerenciarTrava(this)">
+                ${optionsHTML}
+            </select>
+            <button class="btn-remover" onclick="removerLinha(this)">X</button>
+        `;
+        
+        container.appendChild(div);
+        calcularTransformacao();
+    }
+
+    function removerLinha(botao) {
+        const painelPai = botao.closest('.painel');
+        botao.parentElement.remove();
+        
+        // Se removeu da origem, reavalia a trava restritiva
+        if (painelPai.classList.contains('painel-origem')) {
+            reaplicarTravaDestino();
+        }
+        calcularTransformacao();
+    }
+
+    // Descobre qual o tipo predominante selecionado na origem
+    function obterFiltroTrava() {
+        const selectsOrigem = document.querySelectorAll('.tipo-origem');
+        for (let select of selectsOrigem) {
+            const tipo = select.options[select.selectedIndex].getAttribute('data-tipo');
+            if (tipo === 'comissionado' || tipo === 'funcao') {
+                return tipo; // Retorna o primeiro tipo válido encontrado
+            }
+        }
+        return "todos";
+    }
+
+    // Dispara sempre que houver alteração na Origem
+    function gerenciarTrava(selectAlterado) {
+        if (selectAlterado.classList.contains('tipo-origem')) {
+            reaplicarTravaDestino();
+        }
+        calcularTransformacao();
+    }
+
+    // Força o redesenho dos campos de destino baseando-se na trava ativa da Origem
+    function reaplicarTravaDestino() {
+        const filtro = obterFiltroTrava();
+        const selectsDestino = document.querySelectorAll('.tipo-destino');
+
+        selectsDestino.forEach(select => {
+            const valorSelecionado = select.value;
+            select.innerHTML = gerarOptionsCargos(filtro);
+            
+            // Tenta manter o valor anteriormente selecionado se ele ainda for válido no filtro
+            select.value = valorSelecionado;
+            if (select.selectedIndex === -1) { 
+                select.value = "0"; // Reseta caso a opção tenha sumido pelo filtro
+            }
+        });
+    }
+
+    function calcularTransformacao() {
+        let totalCredito = 0;
+        let totalCusto = 0;
+
+        // 1. Calcular Origem (Extintos)
+        const qtdOrigem = document.querySelectorAll('.qtd-origem');
+        const tipoOrigem = document.querySelectorAll('.tipo-origem');
+        qtdOrigem.forEach((input, index) => {
+            const qtd = parseInt(input.value) || 0;
+            const select = tipoOrigem[index];
+            if(select) {
+                const valorBase = parseFloat(select.options[select.selectedIndex].getAttribute('data-valor')) || 0;
+                totalCredito += qtd * (valorBase * FATOR_ATUALIZACAO);
+            }
+        });
+
+        // 2. Calcular Destino (Criados)
+        const qtdDestino = document.querySelectorAll('.qtd-destino');
+        const tipoDestino = document.querySelectorAll('.tipo-destino');
+        qtdDestino.forEach((input, index) => {
+            const qtd = parseInt(input.value) || 0;
+            const select = tipoDestino[index];
+            if(select) {
+                const valorBase = parseFloat(select.options[select.selectedIndex].getAttribute('data-valor')) || 0;
+                totalCusto += qtd * (valorBase * FATOR_ATUALIZACAO);
+            }
+        });
+
+        // 3. Resultados Consolidados
+        const saldo = totalCredito - totalCusto;
+
+        document.getElementById('val-credito').innerText = formatarMoeda(totalCredito);
+        document.getElementById('val-custo').innerText = formatarMoeda(totalCusto);
+        document.getElementById('val-saldo').innerText = formatarMoeda(saldo);
+
+        const msgBox = document.getElementById('status-mensagem');
+        if (totalCredito === 0 && totalCusto === 0) {
+            msgBox.style.display = "none";
+        } else {
+            msgBox.style.display = "block";
+            if (saldo >= 0) {
+                msgBox.className = "saldo-status status-positivo";
+                msgBox.innerHTML = `✅ OPERAÇÃO VIÁVEL<br><small>Saldo Remanescente: ${formatarMoeda(saldo)}</small>`;
+            } else {
+                msgBox.className = "saldo-status status-negativo";
+                msgBox.innerHTML = `❌ IMPACTO FINANCEIRO EXCEDIDO<br><small>Necessita de dotação orçamentária complementar de: ${formatarMoeda(Math.abs(saldo))}</small>`;
+            }
+        }
+    }
+
+    window.onload = function() {
+        adicionarLinha('origem');
+        adicionarLinha('destino');
+    }
+</script>
+
+</body>
+</html>
