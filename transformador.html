@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformação de Cargos e Funções - TJPE</title>
+    <style>
+        :root {
+            --primary: #204b7b;       /* Azul Petróleo TJPE */
+            --primary-dark: #163354;
+            --success: #2e7d32;       /* Verde para saldo positivo */
+            --danger: #c62828;        /* Vermelho para déficit */
+            --bg-light: #f4f6f9;
+            --card-bg: #ffffff;
+            --border-color: #cfd8dc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--bg-light);
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            margin: 0;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .header p {
+            color: #666;
+            margin: 5px 0 0 0;
+            font-size: 14px;
+        }
+
+        /* Grid de Simulação */
+        .simulador-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 850px) {
+            .simulador-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .painel {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            background: #fafafa;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .painel-origem { border-top: 5px solid var(--danger); }
+        .painel-destino { border-top: 5px solid var(--success); }
+
+        .painel h2 {
+            margin-top: 0;
+            font-size: 18px;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+
+        .lista-linhas {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .linha-cargo {
+            display: grid;
+            grid-template-columns: 80px 1fr 40px;
+            gap: 10px;
+            align-items: center;
+        }
+
+        select, input[type="number"] {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .btn-remover {
+            background: #e57373;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            height: 38px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-remover:hover {
+            background: #d32f2f;
+        }
+
+        .btn-adicionar {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.2s;
+            margin-top: auto;
+        }
+
+        .btn-adicionar:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Painel de Resultados */
+        .resultado-box {
+            background: var(--primary-dark);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .resultado-valores {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 550px) {
+            .resultado-valores {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .valor-card {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .valor-card span {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .valor-card strong {
+            font-size: 16px;
+        }
+
+        .saldo-status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .status-positivo { background-color: var(--success); color: white; }
+        .status-negativo { background-color: var(--danger); color: white; }
+
+        .btn-voltar {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .btn-voltar:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Transformação de Cargos e Funções</h1>
+        <p>DGF • NUGOV • TJPE</p>
+    </div>
+
+    <div class="simulador-grid">
+        <div class="painel painel-origem">
+            <h2>Cargos/Funções a Extinguir (-)</h2>
+            <div id="container-origem" class="lista-linhas">
+                </div>
+            <button class="btn-adicionar" onclick="adicionarLinha('origem')">+ Adicionar Cargo</button>
+        </div>
+
+        <div class="painel painel-destino">
+            <h2>Cargos/Funções a Criar (+)</h2>
+            <div id="container-destino" class="lista-linhas">
+                </div>
+            <button class="btn-adicionar" onclick="adicionarLinha('destino')">+ Adicionar Cargo</button>
+        </div>
+    </div>
+
+    <div class="resultado-box">
+        BALANÇO FINANCEIRO DA PROPOSTA
+        <div class="resultado-valores">
+            <div class="valor-card">
+                <span>Crédito (Extintos)</span>
+                <strong id="val-credito">R$ 0,00</strong>
+            </div>
+            <div class="valor-card">
+                <span>Custo (Novos)</span>
+                <strong id="val-custo">R$ 0,00</strong>
+            </div>
+            <div class="valor-card">
+                <span>Saldo Líquido</span>
+                <strong id="val-saldo">R$ 0,00</strong>
+            </div>
+        </div>
+        <div id="status-mensagem" class="saldo-status status-positivo" style="display: none;">
+            --
+        </div>
+    </div>
+
+    <div style="text-align: left;">
+        <a href="index.html" class="btn-voltar">← Voltar ao Portal Principal</a>
+    </div>
+</div>
+
+<script>
+    // FATOR DE ATUALIZAÇÃO DEFINIDO INTERNAMENTE NO CÓDIGO
+    const FATOR_ATUALIZACAO = 1.053;
+
+    // Bancos de dados fornecidos (Comissionados usam o valor da Remuneração 'r')
+    const comissionadosData = [
+        {s: "APJC", b: 1319.77, r: 1583.72}, {s: "DGAPJC", b: 12260.68, r: 14712.82},
+        {s: "DGPJC", b: 13078.07, r: 15693.68}, {s: "DASPJC", b: 7028.09, r: 8433.71},
+        {s: "DSPJC", b: 7590.35, r: 9108.42}, {s: "MPJC", b: 6559.35, r: 7871.22},
+        {s: "PJC", b: 8433.72, r: 10120.46}, {s: "PJC-II", b: 7590.35, r: 9108.42},
+        {s: "PJC-III", b: 7028.09, r: 8433.71}, {s: "PJC-IV", b: 4216.80, r: 5060.16},
+        {s: "PJC-V", b: 3092.36, r: 3710.83}, {s: "PJC-VI", b: 2634.71, r: 3161.65},
+        {s: "PJC-VII", b: 2266.58, r: 2719.90}, {s: "SPJC", b: 8996.05, r: 10795.26}
+    ];
+
+    const funcoesGratificadasData = [
+        {s: "CPL", v: 3142.11}, {s: "FAJ-1", v: 1051.13}, {s: "FAJ-3", v: 450.47}, 
+        {s: "FAP-AJ1G", v: 635.36}, {s: "FAT", v: 2102.28}, {s: "FATUJ", v: 8045.93}, 
+        {s: "FGAGD", v: 8268.36}, {s: "FGAI", v: 2462.9}, {s: "FGAM", v: 3078.65}, 
+        {s: "FGASCPR", v: 9108.41}, {s: "FGATCPR", v: 8433.72}, {s: "FGCCRC", v: 7994.07}, 
+        {s: "FGCJ-1", v: 1944.39}, {s: "FGCNCPR", v: 3997.02}, {s: "FGCNPR", v: 5060.17}, 
+        {s: "FGCNRC", v: 7994.07}, {s: "FGCNSC", v: 1944.39}, {s: "FGCNSPR", v: 3997.02}, 
+        {s: "FGCSJ-1", v: 3534.76}, {s: "FGCSJD", v: 3997.02}, {s: "FGDEGD", v: 8268.36}, 
+        {s: "FGDEPR", v: 7994.07}, {s: "FGDGD", v: 8929.83}, {s: "FGDPR", v: 8633.58}, 
+        {s: "FGDR", v: 8633.58}, {s: "FGGC", v: 1441.36}, {s: "FGGPE-1", v: 8633.58}, 
+        {s: "FGGPE-2", v: 3997.02}, {s: "FGGPE-3", v: 2102.28}, {s: "FGGUJ-1", v: 1441.36}, 
+        {s: "FGGUE", v: 3997.02}, {s: "FGGUE-2", v: 1441.36}, {s: "FGJ-1", v: 2102.28}, 
+        {s: "FGJ-2", v: 1501.62}, {s: "FGJ-3", v: 1051.13}, {s: "FGMN-1", v: 1861.5}, 
+        {s: "FGNCON", v: 3078.65}, {s: "FGNDM-1", v: 3078.65}, {s: "FGNDM-2", v: 1441.36}, 
+        {s: "FGNDR", v: 3534.76}, {s: "FGSCPR", v: 10795.26}, {s: "FGSCRC", v: 3997.02}, 
+        {s: "FGSECPR", v: 10120.47}, {s: "FGSNRC", v: 3997.02}, {s: "FGSPR", v: 3997.02}, 
+        {s: "FGSS", v: 2474}, {s: "FJCP", v: 2295.26}, {s: "FLJ-1", v: 1201.24}, 
+        {s: "FMT", v: 1051.13}, {s: "FSJ-1", v: 1201.24}, {s: "FSJ-3", v: 1201.24}, {s: "RG", v: 2462.9}
+    ];
+
+    function formatarMoeda(valor) {
+        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    // Gera as opções do Select unificando as tabelas e aplicando a nomenclatura descritiva
+    function gerarOptionsCargos() {
+        let html = '<option value="0" data-valor="0">Selecione...</option>';
+        
+        html += '<optgroup label="Cargos Comissionados">';
+        comissionadosData.forEach(c => {
+            html += `<option value="${c.s}" data-valor="${c.r}">💼 ${c.s} (${formatarMoeda(c.r * FATOR_ATUALIZACAO)})</option>`;
+        });
+        html += '</optgroup>';
+
+        html += '<optgroup label="Funções Gratificadas">';
+        funcoesGratificadasData.forEach(f => {
+            html += `<option value="${f.s}" data-valor="${f.v}">🌟 ${f.s} (${formatarMoeda(f.v * FATOR_ATUALIZACAO)})</option>`;
+        });
+        html += '</optgroup>';
+
+        return html;
+    }
+
+    function adicionarLinha(tipo) {
+        const container = document.getElementById(`container-${tipo}`);
+        const div = document.createElement('div');
+        div.className = 'linha-cargo';
+        
+        div.innerHTML = `
+            <input type="number" class="qtd-${tipo}" value="1" min="1" oninput="calcularTransformacao()">
+            <select class="tipo-${tipo}" onchange="calcularTransformacao()">
+                ${gerarOptionsCargos()}
+            </select>
+            <button class="btn-remover" onclick="removerLinha(this)">X</button>
+        `;
+        
+        container.appendChild(div);
+        calcularTransformacao();
+    }
+
+    function removerLinha(botao) {
+        botao.parentElement.remove();
+        calcularTransformacao();
+    }
+
+    function calcularTransformacao() {
+        let totalCredito = 0;
+        let totalCusto = 0;
+
+        // 1. Calcular Origem (Extintos)
+        const qtdOrigem = document.querySelectorAll('.qtd-origem');
+        const tipoOrigem = document.querySelectorAll('.tipo-origem');
+        qtdOrigem.forEach((input, index) => {
+            const qtd = parseInt(input.value) || 0;
+            const select = tipoOrigem[index];
+            const valorBase = parseFloat(select.options[select.selectedIndex].getAttribute('data-valor')) || 0;
+            totalCredito += qtd * (valorBase * FATOR_ATUALIZACAO);
+        });
+
+        // 2. Calcular Destino (Criados)
+        const qtdDestino = document.querySelectorAll('.qtd-destino');
+        const tipoDestino = document.querySelectorAll('.tipo-destino');
+        qtdDestino.forEach((input, index) => {
+            const qtd = parseInt(input.value) || 0;
+            const select = tipoDestino[index];
+            const valorBase = parseFloat(select.options[select.selectedIndex].getAttribute('data-valor')) || 0;
+            totalCusto += qtd * (valorBase * FATOR_ATUALIZACAO);
+        });
+
+        // 3. Resultados Consolidados
+        const saldo = totalCredito - totalCusto;
+
+        document.getElementById('val-credito').innerText = formatarMoeda(totalCredito);
+        document.getElementById('val-custo').innerText = formatarMoeda(totalCusto);
+        document.getElementById('val-saldo').innerText = formatarMoeda(saldo);
+
+        const msgBox = document.getElementById('status-mensagem');
+        if (totalCredito === 0 && totalCusto === 0) {
+            msgBox.style.display = "none";
+        } else {
+            msgBox.style.display = "block";
+            if (saldo >= 0) {
+                msgBox.className = "saldo-status status-positivo";
+                msgBox.innerHTML = `✅ OPERAÇÃO VIÁVEL<br><small>Saldo Remanescente: ${formatarMoeda(saldo)}</small>`;
+            } else {
+                msgBox.className = "saldo-status status-negativo";
+                msgBox.innerHTML = `❌ IMPACTO FINANCEIRO EXCEDIDO<br><small>Necessita de dotação orçamentária complementar de: ${formatarMoeda(Math.abs(saldo))}</small>`;
+            }
+        }
+    }
+
+    // Inicializa o app com uma linha em branco padrão em cada painel
+    window.onload = function() {
+        adicionarLinha('origem');
+        adicionarLinha('destino');
+    }
+</script>
+
+</body>
+</html>
