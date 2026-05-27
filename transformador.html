@@ -5,19 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transformação de Cargos e Funções - TJPE</title>
     <style>
+        /* ==========================================
+           STREAMING_CHUNK: Definindo tokens de estilo e cores institucionais...
+           ========================================== */
         :root {
-            --primary: #204b7b;       /* Azul Petróleo TJPE */
-            --primary-dark: #163354;
-            --success: #2e7d32;       /* Verde para saldo positivo */
-            --danger: #c62828;        /* Vermelho para déficit */
-            --bg-light: #f4f6f9;
-            --card-bg: #ffffff;
-            --border-color: #cfd8dc;
+            /* Cores Oficiais do Manual */
+            --primary: #004488;         /* Azul TJPE (Pantone 287 C) */
+            --primary-dark: #002244;    /* Tom escuro derivado do Azul TJPE */
+            --primary-light: #e6f0fa;   /* Azul claro institucional para fundos */
+            --success: #009944;         /* Verde Oficial (Pantone 347 C) */
+            --danger: #DD2222;          /* Vermelho Oficial (Pantone 485 C) */
+            --yellow: #FFEEOO;          /* Amarelo Oficial */
+            --black: #000000;
+            --white: #FFFFFF;
+            
+            /* Tons de Apoio */
+            --bg-body: #071729;         /* Fundo da página (dark mode profissional) */
+            --card-bg: #FFFFFF;
+            --border-color: #D1D5DB;
+            --text-dark: #1F2937;
+            --text-muted: #4B5563;
         }
 
+        /* ==========================================
+           STREAMING_CHUNK: Configurando tipografia e regras globais...
+           ========================================== */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--bg-body) 0%, var(--primary-dark) 100%);
             margin: 0;
             padding: 20px;
             min-height: 100vh;
@@ -25,47 +40,72 @@
             justify-content: center;
             align-items: center;
             box-sizing: border-box;
+            color: var(--text-dark);
         }
 
+        /* Estilo para valores numéricos e tabelas conforme manual (Calibri) */
+        .calibri-values {
+            font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+        }
+
+        /* ==========================================
+           STREAMING_CHUNK: Estruturando o container principal...
+           ========================================== */
         .container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1200px; /* Expandido para dar mais espaço lateral aos nomes dos cargos e funções */
             background: var(--card-bg);
             border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            padding: 35px;
             box-sizing: border-box;
+            border-top: 6px solid var(--primary);
+            position: relative;
+            overflow: hidden;
         }
 
+        /* Efeito de grafismo institucional de fundo */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(0,68,136,0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Cabecalho */
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--bg-light);
-            padding-bottom: 20px;
+            margin-bottom: 35px;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 25px;
+            position: relative;
         }
 
         .header h1 {
             color: var(--primary);
             margin: 0;
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 800;
+            letter-spacing: -0.5px;
         }
 
-        .header p {
-            color: #666;
-            margin: 5px 0 0 0;
-            font-size: 14px;
-        }
-
-        /* Grid de Simulação */
+        /* ==========================================
+           STREAMING_CHUNK: Configurando grid de simulação dos painéis...
+           ========================================== */
         .simulador-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 25px;
+            gap: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 10;
         }
 
-        @media (max-width: 850px) {
+        @media (max-width: 950px) {
             .simulador-grid {
                 grid-template-columns: 1fr;
             }
@@ -74,171 +114,519 @@
         .painel {
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 20px;
-            background: #fafafa;
+            padding: 24px;
+            background: #FAFBFC;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            z-index: 5;
         }
 
-        .painel-origem { border-top: 5px solid var(--danger); }
-        .painel-destino { border-top: 5px solid var(--success); }
+        .painel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+        }
+
+        /* Garante que o painel ativo fique por cima do outro para a lista não sumir atrás dele */
+        .painel:focus-within {
+            z-index: 30;
+        }
+
+        /* Bordas de Destaque com Cores Oficiais */
+        .painel-origem { 
+             border-top: 5px solid var(--danger); 
+         }
+        .painel-destino { 
+             border-top: 5px solid var(--success); 
+         }
 
         .painel h2 {
             margin-top: 0;
             font-size: 18px;
             color: var(--primary-dark);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
         }
+
+        .painel-origem h2 { color: var(--danger); }
+        .painel-destino h2 { color: var(--success); }
 
         .lista-linhas {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 15px;
+            gap: 15px;
+            margin-bottom: 20px;
+            min-height: 50px;
         }
 
-        .linha-cargo {
+        /* Linha de seleção do Cargo */
+        .linha-cargo-box {
+            background: var(--white);
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
             display: grid;
-            grid-template-columns: 80px 1fr 40px;
-            gap: 10px;
+            grid-template-columns: 85px 1fr 45px;
+            gap: 12px;
             align-items: center;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+            transition: border-color 0.2s;
+            z-index: 2;
         }
 
-        select, input[type="number"] {
-            padding: 10px;
+        .linha-cargo-box:hover {
+            border-color: var(--primary);
+        }
+
+        /* Eleva a linha que está com o combobox aberto acima das outras */
+        .linha-cargo-box:focus-within {
+            z-index: 40;
+        }
+
+        .dropdown-combobox {
+            position: relative;
+            width: 100%;
+        }
+
+        /* ==========================================
+           STREAMING_CHUNK: Estilizando campos de formulário e buscas...
+           ========================================== */
+        input[type="number"], .busca-input {
+            padding: 10px 14px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 14px;
             box-sizing: border-box;
             width: 100%;
+            height: 44px;
+            color: var(--text-dark);
+            background-color: var(--white);
+            transition: all 0.2s;
         }
 
-        .btn-remover {
-            background: #e57373;
-            color: white;
-            border: none;
+        input[type="number"] {
+            font-weight: 600;
+            text-align: center;
+        }
+
+        input[type="number"]:focus, .busca-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 68, 136, 0.15);
+        }
+
+        /* Customização para Textarea de busca (Permite a quebra de linha completa) */
+        textarea.busca-input {
+            height: auto;
+            min-height: 44px;
+            resize: none;
+            overflow: hidden;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.4;
+            font-family: inherit;
+            padding-top: 11px;
+            padding-bottom: 11px;
+            padding-right: 30px; /* Espaço para o ícone indicador */
+            cursor: pointer;
+            text-overflow: clip;
+        }
+
+        /* Indicador do Dropdown */
+        .dropdown-combobox::after {
+            content: '▼';
+            position: absolute;
+            right: 14px;
+            top: 16px;
+            font-size: 9px;
+            color: var(--text-muted);
+            pointer-events: none;
+            transition: transform 0.2s;
+        }
+
+        /* Sugestões do Combobox */
+        .sugestoes-lista {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            height: 38px;
+            max-height: 280px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: none;
+            margin-top: 6px;
+        }
+
+        /* Personalização do scrollbar das sugestões */
+        .sugestoes-lista::-webkit-scrollbar {
+            width: 8px;
+        }
+        .sugestoes-lista::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 8px;
+        }
+        .sugestoes-lista::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 8px;
+        }
+        .sugestoes-lista::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+
+        .sugestoes-grupo {
+            background: var(--primary-light);
+            padding: 8px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: sticky;
+            top: 0;
+            border-bottom: 1px solid rgba(0,68,136,0.1);
+        }
+
+        .sugestao-item {
+            padding: 12px 14px;
+            font-size: 13px;
+            cursor: pointer;
+            border-bottom: 1px solid #F3F4F6;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.15s;
+        }
+
+        .sugestao-item span:first-child {
+            word-break: break-word;
+            padding-right: 10px;
+        }
+
+        .sugestao-item:last-child {
+            border-bottom: none;
+        }
+
+        .sugestao-item:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .sugestao-item .valor-label {
+            font-weight: 700;
+            color: var(--success);
+            margin-left: 12px;
+            white-space: nowrap;
+        }
+
+        /* Botões */
+        .btn-remover {
+            background: #FEE2E2;
+            color: var(--danger);
+            border: 1px solid #FCA5A5;
+            border-radius: 8px;
+            height: 44px;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.2s;
+            font-size: 14px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-remover:hover {
-            background: #d32f2f;
+            background: var(--danger);
+            color: var(--white);
+            border-color: var(--danger);
         }
 
         .btn-adicionar {
             background: var(--primary);
-            color: white;
+            color: var(--white);
             border: none;
             border-radius: 8px;
-            padding: 10px;
+            padding: 14px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 700;
             font-size: 14px;
-            transition: background 0.2s;
+            transition: all 0.2s;
             margin-top: auto;
+            box-shadow: 0 4px 6px rgba(0, 68, 136, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-adicionar:hover {
             background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0, 68, 136, 0.25);
         }
 
-        /* Painel de Resultados */
+        /* ==========================================
+           STREAMING_CHUNK: Definindo blocos de resultados e balanço...
+           ========================================== */
         .resultado-box {
-            background: var(--primary-dark);
-            color: white;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: var(--white);
             border-radius: 12px;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0, 68, 136, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 1; /* Mantém o balanço sempre abaixo das listas suspensas */
+        }
+
+        .resultado-box-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            opacity: 0.9;
+            margin-bottom: 18px;
         }
 
         .resultado-valores {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
-        @media (max-width: 550px) {
+        @media (max-width: 600px) {
             .resultado-valores {
                 grid-template-columns: 1fr;
             }
         }
 
         .valor-card {
-            background: rgba(255,255,255,0.1);
-            padding: 10px;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .valor-card:hover {
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .valor-card span {
             display: block;
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.8;
-            margin-bottom: 5px;
+            letter-spacing: 1.5px;
+            opacity: 0.75;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .valor-card strong {
-            font-size: 16px;
+            font-size: 20px;
+            font-weight: 700;
         }
 
+        /* Mensagens de Validação e Viabilidade Técnicas (Sólidas e Profissionais) */
         .saldo-status {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 16px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            text-align: left;
+            transition: all 0.3s ease;
         }
 
-        .status-positivo { background-color: var(--success); color: white; }
-        .status-negativo { background-color: var(--danger); color: white; }
+        .status-positivo { 
+             background-color: #137333; 
+             color: var(--white); 
+             border-left: 5px solid #2ECC71;
+        }
+        
+        .status-negativo { 
+             background-color: #A62B2B; 
+             color: var(--white); 
+             border-left: 5px solid #E74C3C;
+        }
+
+        /* ==========================================
+           STREAMING_CHUNK: Estruturando ações inferiores e rodapé...
+           ========================================== */
+        .acoes-inferiores {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            gap: 20px;
+        }
 
         .btn-voltar {
-            display: inline-block;
-            margin-top: 10px;
             color: var(--primary);
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 700;
             font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
         }
 
         .btn-voltar:hover {
+            color: var(--primary-dark);
             text-decoration: underline;
         }
+
+        .btn-exportar {
+            background-color: #374151;
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-exportar:hover {
+            background-color: #1F2937;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        /* ==========================================
+           TOAST NOTIFICATION (SISTEMA SEM ALERTS)
+           ========================================== */
+        .toast-notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 16px 24px;
+            border-radius: 8px;
+            background: var(--primary-dark);
+            color: var(--white);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 2000;
+            transform: translateY(150%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .toast-notification.show {
+            transform: translateY(0);
+        }
+
+        .toast-notification.success {
+            border-left-color: var(--success);
+        }
+
+        .toast-notification.danger {
+            border-left-color: var(--danger);
+        }
+
+        /* Rodapé de Conformidade */
+        footer {
+            margin-top: 45px;
+            border-top: 2px solid var(--primary-light);
+            padding-top: 30px;
+            text-align: center;
+        }
+
+        .footer-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo {
+            height: 48px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.06));
+            transition: transform 0.2s;
+        }
+
+        .footer-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .footer-text {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
-
-<div class="container">
+<div class="container" id="conteudo-projeto">
+    <!-- Cabecalho Institucional -->
     <div class="header">
         <h1>Transformação de Cargos e Funções</h1>
-        <p>DGF • NUGOV • TJPE</p>
     </div>
 
+    <!-- ==========================================
+       STREAMING_CHUNK: Painéis Laterais de Simulação...
+       ========================================== -->
     <div class="simulador-grid">
+        <!-- Origem -->
         <div class="painel painel-origem">
-            <h2>Cargos/Funções a Extinguir (-)</h2>
-            <div id="container-origem" class="lista-linhas">
-                </div>
-            <button class="btn-adicionar" onclick="adicionarLinha('origem')">+ Adicionar Cargo</button>
+            <h2>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Cargos/Funções a Extinguir
+            </h2>
+            <div id="container-origem" class="lista-linhas"></div>
+            <button class="btn-adicionar" onclick="adicionarLinha('origem')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Adicionar Cargo
+            </button>
         </div>
 
+        <!-- Destino -->
         <div class="painel painel-destino">
-            <h2>Cargos/Funções a Criar (+)</h2>
-            <div id="container-destino" class="lista-linhas">
-                </div>
-            <button class="btn-adicionar" onclick="adicionarLinha('destino')">+ Adicionar Cargo</button>
+            <h2>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Cargos/Funções a Criar
+            </h2>
+            <div id="container-destino" class="lista-linhas"></div>
+            <button class="btn-adicionar" onclick="adicionarLinha('destino')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Adicionar Cargo
+            </button>
         </div>
     </div>
 
+    <!-- ==========================================
+       STREAMING_CHUNK: Painel consolidado de resultados...
+       ========================================== -->
     <div class="resultado-box">
-        BALANÇO FINANCEIRO DA PROPOSTA
-        <div class="resultado-valores">
+        <div class="resultado-box-title">Balanço Financeiro da Proposta</div>
+        <div class="resultado-valores calibri-values">
             <div class="valor-card">
                 <span>Crédito (Extintos)</span>
                 <strong id="val-credito">R$ 0,00</strong>
@@ -252,200 +640,564 @@
                 <strong id="val-saldo">R$ 0,00</strong>
             </div>
         </div>
-        <div id="status-mensagem" class="saldo-status status-positivo" style="display: none;">
+        <div id="status-mensagem" class="saldo-status" style="display: none;">
             --
         </div>
     </div>
 
-    <div style="text-align: left;">
-        <a href="index.html" class="btn-voltar">← Voltar ao Portal Principal</a>
+    <!-- Botoes de Ação -->
+    <div class="acoes-inferiores">
+        <a href="index.html" class="btn-voltar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Voltar ao Portal Principal
+        </a>
+        <button class="btn-exportar" onclick="exportarComoImagem()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            Exportar Proposta
+        </button>
     </div>
+
+    <!-- Rodapé de Conformidade com o Manual -->
+    <footer>
+        <div class="footer-logos">
+            <img src="https://i.ibb.co/FkLCjrFV/Capturar-removebg-preview-1.png" class="footer-logo" alt="Logo TJPE">
+            <img src="https://i.ibb.co/yc32bwv5/Logo-DGF-upscaled-Photoroom.png" class="footer-logo" alt="Logo DGF">
+        </div>
+        <div class="footer-text">DGF • NUGOV • TJPE</div>
+    </footer>
+</div>
+
+<!-- Componente Customizado Toast -->
+<div id="toast" class="toast-notification">
+    <span id="toast-message">Notificação</span>
 </div>
 
 <script>
-    const FATOR_ATUALIZACAO = 1.00;
+/* ==========================================
+   STREAMING_CHUNK: Inicializando base de dados comissionados e gratificações...
+   ========================================== */
+const FATOR_ATUALIZACAO = 1.053;
+const valoresComissionadosRef = {
+    "DGAPJC": 14712.82, "DGPJC": 15693.68, "DASPJC": 8433.71, "DSPJC": 9108.42,
+    "MPJC": 7871.22, "SPJC": 10795.26, "APJC": 1583.72, "PJC": 10120.46,
+    "PJC-II": 9108.42, "PJC-III": 8433.71, "PJC-IV": 5060.16, "PJC-V": 3710.83,
+    "PJC-VI": 3161.65, "PJC-VII": 2719.90
+};
+const comissionadosData = [
+    {n: "ADMINISTRADOR AUXILIAR DO PRÉDIO DO FÓRUM DA COMARCA DE PETROLINA", s: "PJC-V"},
+    {n: "ADMINISTRADOR AUXILIAR DO PRÉDIO", s: "PJC-V"},
+    {n: "ADMINISTRADOR AUXILIAR DO PRÉDIO DA CENTRAL DE JUIZADOS DA CAPITAL", s: "PJC-V"},
+    {n: "ADMINISTRADOR AUXILIAR DO PRÉDIO DO FÓRUM DA COMARCA DE CARUARU", s: "PJC-V"},
+    {n: "ADMINISTRADOR AUXILIAR DO PRÉDIO DO FÓRUM DA COMARCA DE GARANHUNS", s: "PJC-V"},
+    {n: "ADMINISTRADOR AUXILIAR DO PRÉDIO DO FÓRUM DA COMARCA DE JABOATÃO DOS GUARARAPES", s: "PJC-V"},
+    {n: "ADMINISTRADOR AUXILIAR DO PRÉDIO DO FÓRUM DA COMARCA DE OLINDA", s: "PJC-V"},
+    {n: "ADMINISTRADOR AUXILIAR DO PRÉDIO DO FÓRUM PAULA BATISTA", s: "PJC-V"},
+    {n: "ADMINISTRADOR AUXILIAR DO PRÉDIO DO FÓRUM RODOLFO AURELIANO", s: "PJC-V"},
+    {n: "ADMINISTRADOR AUXILIAR DO PRÉDIO DO FÓRUM THOMAZ DE AQUINO CYRILLO WANDERLEY", s: "PJC-V"},
+    {n: "ADMINISTRADOR DO PRÉDIO", s: "PJC-IV"},
+    {n: "ADMINISTRADOR DO PRÉDIO CENTRAL JUIZADOS COMARCA DA CAPITAL", s: "PJC-IV"},
+    {n: "ADMINISTRADOR DO PRÉDIO DO FÓRUM DA COMARCA DE CARUARU", s: "PJC-IV"},
+    {n: "ADMINISTRADOR DO PRÉDIO DO FÓRUM DA COMARCA DE GARANHUNS", s: "PJC-IV"},
+    {n: "ADMINISTRADOR DO PRÉDIO DO FÓRUM DA COMARCA DE JABOATÃO DOS GUARARAPES", s: "PJC-IV"},
+    {n: "ADMINISTRADOR DO PRÉDIO DO FÓRUM DA COMARCA DE OLINDA", s: "PJC-IV"},
+    {n: "ADMINISTRADOR DO PRÉDIO DO FÓRUM DA COMARCA DE PETROLINA", s: "PJC-IV"},
+    {n: "ADMINISTRADOR DO PRÉDIO DO FÓRUM DO DISTRITO JUDICIÁRIO ESPECIAL DE F. DE NORONHA", s: "PJC-IV"},
+    {n: "ADMINISTRADOR DO PRÉDIO DO FÓRUM PAULA BATISTA", s: "PJC-IV"},
+    {n: "ADMINISTRADOR DO PRÉDIO DO FÓRUM RODOLFO AURELIANO", s: "PJC-IV"},
+    {n: "ADMINISTRADOR DO PRÉDIO DO FÓRUM THOMAZ DE AQUINO CYRILLO WANDERLEY", s: "PJC-IV"},
+    {n: "ADMNISTRADOR AUXILIAR DO PRÉDIO DO CENTRO INTEGRADO DA CRIANÇA E DO ADOLECENTE - CICA", s: "PJC-V"},
+    {n: "ADMNISTRADOR DO PRÉDIO DO CENTRO INTEGRADO DA CRIANÇA E DO ADOLECENTE - CICA", s: "PJC-IV"},
+    {n: "AGENTE DE TRANSPORTE E SEGURANÇA", s: "PJC-VI"},
+    {n: "ASSESSOR ADJUNTO", s: "PJC-III"},
+    {n: "ASSESSOR ADMINISTRATIVO DA SECRETARIA DE ADMINISTRAÇÃO", s: "PJC-II"},
+    {n: "ASSESSOR COMUNICAÇÃO SOCIAL DA CGJ", s: "PJC-II"},
+    {n: "ASSESSOR DE CERIMONIAL", s: "PJC-II"},
+    {n: "ASSESSOR DE COMUNICAÇÃO SOCIAL", s: "PJC-II"},
+    {n: "ASSESSOR DE GABINETE DA PRESIDÊNCIA", s: "PJC-VII"},
+    {n: "ASSESSOR DE MAGISTRADO", s: "APJC"},
+    {n: "ASSESSOR JURÍDICO", s: "PJC-II"},
+    {n: "ASSESSOR JURÍDICO DA PRESIDÊNCIA", s: "PJC-II"},
+    {n: "ASSESSOR JURÍDICO DE PRECATÓRIOS", s: "PJC-II"},
+    {n: "ASSESSOR ORÇAMENTO E FINANÇAS", s: "PJC-II"},
+    {n: "ASSESSOR OUVIDORIA JUDICIÁRIA/PJC-IV", s: "PJC-IV"},
+    {n: "ASSESSOR TÉC DA INF DA PRESIDENCIA DO TJ", s: "PJC-II"},
+    {n: "ASSESSOR TÉC DIRETORIA/ENG. ELETRICISTA/PJC-III", s: "PJC-III"},
+    {n: "ASSESSOR TÉCNICO", s: "PJC-III"},
+    {n: "ASSESSOR TÉCNICO ADMINISTRATIVO", s: "PJC-III"},
+    {n: "ASSESSOR TÉCNICO CORREGEDORIA AUX", s: "PJC-IV"},
+    {n: "ASSESSOR TÉCNICO DA CGJ", s: "PJC-II"},
+    {n: "ASSESSOR TÉCNICO DA DIRETORIA DE INFRAESTRUTURA - ENGENHARIA CIVIL", s: "PJC-III"},
+    {n: "ASSESSOR TÉCNICO DA PRESIDÊNCIA", s: "PJC-V"},
+    {n: "ASSESSOR TÉCNICO DE DIRETORIA", s: "PJC-III"},
+    {n: "ASSESSOR TÉCNICO DIRETORIA GERAL", s: "PJC-II"},
+    {n: "ASSESSOR TÉCNICO GOVERNANÇA", s: "PJC-III"},
+    {n: "ASSESSOR TÉCNICO INFORMAÇÃO CGJ", s: "PJC-II"},
+    {n: "ASSESSOR TÉCNICO JUDICIÁRIA", s: "PJC-II"},
+    {n: "ASSESSOR TÉCNICO LEGISLATIVO/PJC-III", s: "PJC-III"},
+    {n: "ASSISTENTE CHEFE DA ASSISTÊNCIA POLICIAL MILITAR E CIVIL DO TJ", s: "MPJC"},
+    {n: "ASSISTENTE TÉC INFORMAÇÃO CORREG GERAL", s: "PJC-III"},
+    {n: "ASSISTENTE TÉCNICO DA ASSESSORIA DE COMUNIC SOCIAL", s: "PJC-V"},
+    {n: "CHEFE ADJUNTO DA CENTRAL DE PERÍCIAS JUDICIAIS", s: "PJC-III"},
+    {n: "CHEFE DA CENTRAL DE PERÍCIAS JUDICIAIS", s: "PJC-II"},
+    {n: "CHEFE DE AUDITORIA DE INSPEÇÃO DA CORREGEDORIA GERAL DE JUSTIÇA", s: "PJC-IV"},
+    {n: "CHEFE DE GABINETE", s: "PJC-III"},
+    {n: "CHEFE DE GABINETE DA PRESIDÊNCIA", s: "PJC"},
+    {n: "CHEFE DO CENTRO DE APOIO PSICOSSOCIAL", s: "PJC-III"},
+    {n: "CHEFE GABINETE DA CGJ", s: "PJC-III"},
+    {n: "CHEFE GABINETE VICE-PRESIDÊNCIA", s: "PJC-III"},
+    {n: "CONSULTOR JURÍDICO", s: "SPJC"},
+    {n: "CONSULTOR JURÍDICO ADJUNTO", s: "PJC"},
+    {n: "COORD ADJ CENTRAL MANDADOS CAPITAL/PJC-III", s: "PJC-III"},
+    {n: "COORD CENTRAL MANDADOS CAPITAL/PJC-II", s: "PJC-II"},
+    {n: "COORDENADOR ADJUNTO", s: "PJC-III"},
+    {n: "COORDENADOR ADJUNTO DOS JUIZADOS ESPECIAIS", s: "PJC-III"},
+    {n: "COORDENADOR ADJUNTO INFÂNCIA E JUVENTUDE", s: "PJC-III"},
+    {n: "DIRETOR", s: "DSPJC"},
+    {n: "DIRETOR ADJUNTO", s: "DASPJC"},
+    {n: "DIRETOR ADJUNTO DE CONTABILIDADE", s: "PJC-III"},
+    {n: "DIRETOR ADJUNTO DE SAÚDE", s: "PJC-III"},
+    {n: "DIRETOR DE ATENDIMENTO AO USUÁRIO", s: "PJC-II"},
+    {n: "DIRETOR DE CONTABILIDADE", s: "PJC-II"},
+    {n: "DIRETOR DE DIRETORIA DA SECRETARIA GESTÃO DE PESSOAS", s: "PJC-II"},
+    {n: "DIRETOR DE SAÚDE", s: "PJC-II"},
+    {n: "DIRETOR DE SISTEMAS", s: "PJC-II"},
+    {n: "DIRETOR DE TERCEIRIZAÇÃO DE PROVIMENTO EM COMISSÃO", s: "PJC-II"},
+    {n: "DIRETOR GERAL ADJUNTO DO TRIBUNAL JUSTIÇA", s: "DGAPJC"},
+    {n: "DIRETOR GERAL TRIBUNAL JUSTIÇA", s: "DGPJC"},
+    {n: "DIRETOR OPERAÇÕES DE TECNOLOGIA DA INFORMAÇÃO E COMUNICAÇÃO", s: "PJC-II"},
+    {n: "OFICIAL DE GABINETE", s: "PJC-VI"},
+    {n: "SECRETÁRIO", s: "SPJC"},
+    {n: "SECRETÁRIO ADJUNTO", s: "PJC"},
+    {n: "SECRETÁRIO ADJUNTO DA AUDITORIA INTERNA", s: "PJC"},
+    {n: "SECRETÁRIO ADJUNTO DA COORDENADORIA GERAL DE PRECATÓRIOS", s: "PJC-III"},
+    {n: "SECRETÁRIO ADJUNTO GESTÃO DE PESSOAS", s: "PJC"},
+    {n: "SECRETÁRIO ADJUNTO TEC INFORMAÇÃO E COMUNICAÇÃO", s: "PJC"},
+    {n: "SECRETÁRIO CONSELHO DA MAGISTRATURA", s: "PJC-II"},
+    {n: "SECRETÁRIO DA AUDITORIA INTERNA", s: "SPJC"},
+    {n: "SECRETÁRIO DA COORDENADORIA GERAL DE PRECATÓRIOS", s: "PJC-II"},
+    {n: "SECRETÁRIO DE ADMINISTRAÇÃO", s: "SPJC"},
+    {n: "SECRETÁRIO DE ADMINISTRAÇÃO ADJUNTO", s: "PJC"},
+    {n: "SECRETÁRIO DE TECNOLOGIA DA INFORMAÇÃO E COMUNICAÇÃO", s: "SPJC"},
+    {n: "SECRETÁRIO DESEMBARGADOR", s: "PJC-IV"},
+    {n: "SECRETÁRIO EXECUTIVO", s: "PJC-II"},
+    {n: "SECRETÁRIO EXECUTIVO ADJUNTO", s: "PJC-III"},
+    {n: "SECRETÁRIO GERAL DA CGJ", s: "PJC"},
+    {n: "SECRETÁRIO GERAL DA VICE-PRESIDÊNCIA", s: "PJC"},
+    {n: "SECRETÁRIO GESTÃO DE PESSOAS", s: "SPJC"},
+    {n: "SECRETÁRIO JUDICIÁRIO", s: "SPJC"},
+    {n: "SECRETÁRIO JUDICIÁRIO ADJUNTO", s: "PJC"},
+    {n: "SUPERVISOR TÉCNICO DA SECRETARIA DE GESTÃO DE PESSOAS", s: "PJC-IV"},
+    {n: "SUPERVISOR TÉCNICO JUIZADOS ESPECIAIS", s: "PJC-IV"},
+    {n: "SUPERVISOR TÉCNICO VARA REGIONAL INFÂNCIA E JUVENTUDE/1ª", s: "PJC-IV"}
+];
+const funcoesGratificadasData = [
+    {n: "ADMINISTRADOR DO FORO", s: "FSJ-3", v: 1201.24},
+    {n: "APOIO ATIVIDADE JURISDICIONAL 1º GRAU", s: "FAP-AJ1G", v: 635.36},
+    {n: "APOIO ATIVIDADE JURISDICIONAL 1º GRAU - CENJUD", s: "FAP-AJ1G", v: 635.36},
+    {n: "APOIO ATIVIDADE JURISDICIONAL 1º GRAU - NUCLEO DE REVISORES E CERTIFICADORES", s: "FAP-AJ1G", v: 635.36},
+    {n: "ASSESSOR DE GESTÃO DOCUMENTAL", s: "FGAGD", v: 8268.36},
+    {n: "ASSESSOR DE MAGISTRADO", s: "FGAM", v: 3078.65},
+    {n: "ASSESSOR MAGISTRADO 2º/FGAM", s: "FGAM", v: 3078.65},
+    {n: "ASSESSOR PLANEJAMENTO E MONITORAMENTO DE CENTRAL DE PROCESSAMENTO REMOTO DE 1º GRAU", s: "FGASCPR", v: 9108.41},
+    {n: "ASSESSOR TÉCNICO DE GOVERNANÇA", s: "FGATG", v: 8433.72},
+    {n: "ASSESSORIA DA TURMA DE UNIFORMIZAÇÃO DE JURISPRUDÊNCIA", s: "FATUJ", v: 8045.93},
+    {n: "ASSESSORIA TÉCNICA DE INOVAÇÃO E INTELIGÊNCIA ARTIFICIAL", s: "FGATIA", v: 2462.90},
+    {n: "ASSISTENTE DE PLANEJAMENTO E MONITORAMENTO DE CENTRAL DE PROCESSAMENTO REMOTO DE 1º GRAU", s: "FAPMCPR", v: 2102.28},
+    {n: "ASSISTENTE TÉCNICO ASSES ESPECIAL CGJ/FGJ-2", s: "FGJ-2", v: 1501.62},
+    {n: "AUDITOR DE INSPEÇÃO/CGJ", s: "FGAI", v: 2462.90},
+    {n: "CHEFE ADJ.DIVISÃO LIQUIDAÇÃO PENAL", s: "FGJ-2", v: 1501.62},
+    {n: "CHEFE CENTRAL ATEND SEC GERAL DA CGJ", s: "FGJ-1", v: 2102.28},
+    {n: "CHEFE DE APOIO A ATIVIDADE CORREICIONAL", s: "FGJ-2", v: 1501.62},
+    {n: "CHEFE DE APOIO JUDICIARIO/ FGJ-1", s: "FGJ-1", v: 2102.28},
+    {n: "CHEFE DE DIVISÃO", s: "FGJ-1", v: 2102.28},
+    {n: "CHEFE DE NÚCLEO", s: "FGJ-1", v: 2102.28},
+    {n: "CHEFE DE NÚCLEO DA CONTADORIA REMOTA DE 1º GRAU", s: "FCNCRCPR", v: 7994.07},
+    {n: "CHEFE DE NÚCLEO DE APOIO ADMINISTRATIVO", s: "FCNAACPR", v: 3997.02},
+    {n: "CHEFE DE NÚCLEO DE BIBLIOTECA", s: "FGJ-1", v: 2102.28},
+    {n: "CHEFE DE NÚCLEO DE DIRETORIA REMOTA", s: "FCNDR", v: 3534.76},
+    {n: "CHEFE DE NÚCLEO DE MONITORAMENTO DE CENTRAL DE PROCESSAMENTO DE 1º GRAU", s: "FCNMCPR", v: 3997.02},
+    {n: "CHEFE DE NÚCLEO DE PLANEJAMENTO DE CENTRAL DE PROCESSAMENTO REMOTO DE 1º GRAU", s: "FCNPCPR", v: 3997.02},
+    {n: "CHEFE DE SEÇÃO", s: "FGJ-2", v: 1501.62},
+    {n: "CHEFE DE UNIDADE", s: "FGJ-2", v: 1501.62},
+    {n: "CHEFE DIVISÃO LIQUIDAÇÃO PENAL", s: "FGJ-1", v: 2102.28},
+    {n: "CHEFE DO CAPEMA", s: "FGCSJ-1", v: 3534.76},
+    {n: "CHEFE DO NÚCLEO DE DISTRIBUIÇÃO DE MANDADOS 2", s: "FGNDM-2", v: 1441.36},
+    {n: "CHEFE NUCLEO DISTRIB MANDADOS/FGNDM", s: "FGNDM-1", v: 1861.50},
+    {n: "CHEFE SECRETARIA ESTRUTURA DIFERENCIADA", s: "FGCSJD", v: 3997.02},
+    {n: "CHEFE SECRETARIA JUDICIARIA DA CGJ", s: "FGJ-1", v: 2102.28},
+    {n: "CHEFE UNIDADE AGRAVOS REC EXCEP CARTRIS", s: "FGJ-2", v: 1501.62},
+    {n: "CHEFE UNIDADE DIGIT, REM E BAIXA REC EXCEP CARTRIS", s: "FGJ-2", v: 1501.62},
+    {n: "CHEFE UNIDADE RECURSOS EXCEPC CARTRIS", s: "FGJ-2", v: 1501.62},
+    {n: "COMISSÃO PERMANENTE DE LICITAÇÃO (CPL)", s: "CPL", v: 3142.11},
+    {n: "CONCILIADOR CEJUSC", s: "FGCNSC", v: 1944.39},
+    {n: "CONCILIADOR JUIZADO", s: "FGCJ-1", v: 1944.39},
+    {n: "COORDENADOR DA CONTADORIA REMOTA", s: "FCCRCPR", v: 7994.07},
+    {n: "COORDENADOR DE PROCESSAMENTO REMOTO", s: "FCPRCPR", v: 3997.02},
+    {n: "COORDENADOR DE UNIDADE", s: "FGJ-2", v: 1501.62},
+    {n: "COORDENADOR DO NÚCLEO DE REVISÃO E CERTIFICAÇÃO REMOTA", s: "FCNRCR", v: 3997.02},
+    {n: "COORDENADORIA DE PRECATÓRIOS", s: "PREC", v: 3997.02},
+    {n: "DIRETOR DE DIRETORIA DE PROCESSAMENTO REMOTO", s: "FGDPR", v: 8633.58},
+    {n: "DIRETOR DE GESTÃO DOCUMENTAL", s: "FGDGD", v: 8929.83},
+    {n: "DIRETOR EXECUTIVO DE DIRETORIA DE PROCESSAMENTO REMOTO", s: "FGDEPR", v: 7994.07},
+    {n: "DIRETOR EXECUTIVO DE GESTÃO DOCUMENTAL", s: "FGDEGD", v: 8268.36},
+    {n: "DIRETOR EXECUTIVO DE OPERAÇÕES", s: "FGDEO", v: 7994.07},
+    {n: "DIRETOR EXECUTIVO DE SISTEMAS", s: "FGDES", v: 7994.07},
+    {n: "DIRETOR REGIONAL", s: "FGDR", v: 8633.58},
+    {n: "FUNÇÃO DE APOIO JUDICIÁRIA", s: "FAJ-1", v: 1051.13},
+    {n: "FUNÇÃO DE ASSESSORAMENTO TÉCNICO", s: "FAT", v: 2102.28},
+    {n: "FUNÇÃO DE SECR. JUDICIÁRIA", s: "FSJ-1", v: 1201.24},
+    {n: "FUNÇÃO DE SECRETARIADO JUDICIÁRIA", s: "FSJ-1", v: 1201.24},
+    {n: "FUNÇÃO GERENCIAL JUDICIÁRIA (FGJ-1)", s: "FGJ-1", v: 2102.28},
+    {n: "FUNÇÃO GERENCIAL JUDICIÁRIA (FGJ-2)", s: "FGJ-2", v: 1501.62},
+    {n: "FUNÇÃO GERENCIAL JUDICIÁRIA (FGJ-3)", s: "FGJ-3", v: 1051.13},
+    {n: "FUNCAO GERENCIAL SECR DE SESSAO - FGSS", s: "FGSS", v: 2474.00},
+    {n: "GERENTE", s: "FGJ-1", v: 2102.28},
+    {n: "GERENTE DA DIRETORIA DE GESTÃO FINANCEIRA DE MAGISTRADOS", s: "FGGUE2", v: 1441.36},
+    {n: "GERENTE DA DIRETORIA DE GESTÃO FUNCIONAL", s: "FGGUE1", v: 3997.02},
+    {n: "GERENTE DE NÚCLEO DA CONTADORIA REMOTA DE 1º GRAU", s: "FGJ-1", v: 2102.28},
+    {n: "GERENTE DE NÚCLEO DE APOIO ADMINISTRATIVO", s: "FGJ-1", v: 2102.28},
+    {n: "GERENTE DE UNIDADE JUDICIÁRIA DO 1º GRAU", s: "FGGUJ-1", v: 1441.36},
+    {n: "GERENTE GERAL DO CARTRIS", s: "FGJ-1", v: 2102.28},
+    {n: "GESTOR DE CEJUSC", s: "FGGC", v: 1441.36},
+    {n: "GESTOR DE PROJETO", s: "FGJ-2", v: 1501.62},
+    {n: "GESTOR DE PROJETO ESTRATÉGICO I", s: "FGGPE-1", v: 8633.58},
+    {n: "GERENTE DE PROJETO ESTRATÉGICO II", s: "FGGPE-2", v: 3997.02},
+    {n: "GESTOR DE PROJETO ESTRATÉGICO III", s: "FGGPE-3", v: 2102.28},
+    {n: "GESTOR DE UNIDADE ESPECIAL 1", s: "FGGUE1", v: 3997.02},
+    {n: "GESTOR DE UNIDADE ESPECIAL 2", s: "FGGUE2", v: 1441.36},
+    {n: "LÍDER DE EQUIPE", s: "FLJ-1", v: 1201.24},
+    {n: "LÍDER TÉCNICO", s: "FGJ-2", v: 1501.62},
+    {n: "MEMBRO DE NÚCLEO DO NUGEPNAC/FGMN-1", s: "FGMN-1", v: 1861.50},
+    {n: "REPRESENTAÇÃO DE GABINETE", s: "RG", v: 2462.90},
+    {n: "SECRETARIADO E APOIO ADMIN(CENJUD)/FSJ-1", s: "FSJ-1", v: 1201.24},
+    {n: "SECRETARIADO E APOIO ADMINISTRATIVO (FAJ-3)", s: "FAJ-3", v: 450.47},
+    {n: "SECRETARIADO E APOIO ADMINISTRATIVO (FSJ-1)", s: "FSJ-1", v: 1201.24},
+    {n: "SECRETÁRIO DE CENTRAL DE PROCESSAMENTO REMOTO DE 1º GRAU", s: "FSCPR", v: 10795.26},
+    {n: "SECRETÁRIO EXECUTIVO DE CENTRAL DE PROCESSAMENTO REMOTO DE 1º GRAU", s: "FSECPR", v: 10120.47},
+    {n: "SECRETÁRIO GERAL COGESI/ FGJ-1", s: "FGJ-1", v: 2102.28},
+    {n: "SUPERVISOR DE PROCESSAMENTO REMOTO", s: "FGSPR", v: 3997.02},
+    {n: "SUPERVISOR TÉCNICO DA CONTADORIA REMOTA", s: "FSTCR", v: 3997.02},
+    {n: "SUPERVISOR TÉCNICO DA DIRETORIA GERAL", s: "FGSTDG", v: 3997.02},
+    {n: "SUPERVISOR TÉCNICO DE TIC", s: "FGGUE-1", v: 3997.02},
+    {n: "SUPERVISOR TÉCNICO DO NÚCLEO DE REVISÃO E CERTIFICAÇÃO REMOTA", s: "FGSNRC", v: 3997.02}
+];
 
-    const comissionadosData = [
-        {s: "APJC", b: 1319.77, r: 1583.72}, {s: "DGAPJC", b: 12260.68, r: 14712.82},
-        {s: "DGPJC", b: 13078.07, r: 15693.68}, {s: "DASPJC", b: 7028.09, r: 8433.71},
-        {s: "DSPJC", b: 7590.35, r: 9108.42}, {s: "MPJC", b: 6559.35, r: 7871.22},
-        {s: "PJC", b: 8433.72, r: 10120.46}, {s: "PJC-II", b: 7590.35, r: 9108.42},
-        {s: "PJC-III", b: 7028.09, r: 8433.71}, {s: "PJC-IV", b: 4216.80, r: 5060.16},
-        {s: "PJC-V", b: 3092.36, r: 3710.83}, {s: "PJC-VI", b: 2634.71, r: 3161.65},
-        {s: "PJC-VII", b: 2266.58, r: 2719.90}, {s: "SPJC", b: 8996.05, r: 10795.26}
-    ];
+function formatarMoeda(valor) {
+    return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
 
-    const funcoesGratificadasData = [
-        {s: "CPL", v: 3142.11}, {s: "FAJ-1", v: 1051.13}, {s: "FAJ-3", v: 450.47}, 
-        {s: "FAP-AJ1G", v: 635.36}, {s: "FAT", v: 2102.28}, {s: "FATUJ", v: 8045.93}, 
-        {s: "FGAGD", v: 8268.36}, {s: "FGAI", v: 2462.9}, {s: "FGAM", v: 3078.65}, 
-        {s: "FGASCPR", v: 9108.41}, {s: "FGATCPR", v: 8433.72}, {s: "FGCCRC", v: 7994.07}, 
-        {s: "FGCJ-1", v: 1944.39}, {s: "FGCNCPR", v: 3997.02}, {s: "FGCNPR", v: 5060.17}, 
-        {s: "FGCNRC", v: 7994.07}, {s: "FGCNSC", v: 1944.39}, {s: "FGCNSPR", v: 3997.02}, 
-        {s: "FGCSJ-1", v: 3534.76}, {s: "FGCSJD", v: 3997.02}, {s: "FGDEGD", v: 8268.36}, 
-        {s: "FGDEPR", v: 7994.07}, {s: "FGDGD", v: 8929.83}, {s: "FGDPR", v: 8633.58}, 
-        {s: "FGDR", v: 8633.58}, {s: "FGGC", v: 1441.36}, {s: "FGGPE-1", v: 8633.58}, 
-        {s: "FGGPE-2", v: 3997.02}, {s: "FGGPE-3", v: 2102.28}, {s: "FGGUJ-1", v: 1441.36}, 
-        {s: "FGGUE", v: 3997.02}, {s: "FGGUE-2", v: 1441.36}, {s: "FGJ-1", v: 2102.28}, 
-        {s: "FGJ-2", v: 1501.62}, {s: "FGJ-3", v: 1051.13}, {s: "FGMN-1", v: 1861.5}, 
-        {s: "FGNCON", v: 3078.65}, {s: "FGNDM-1", v: 3078.65}, {s: "FGNDM-2", v: 1441.36}, 
-        {s: "FGNDR", v: 3534.76}, {s: "FGSCPR", v: 10795.26}, {s: "FGSCRC", v: 3997.02}, 
-        {s: "FGSECPR", v: 10120.47}, {s: "FGSNRC", v: 3997.02}, {s: "FGSPR", v: 3997.02}, 
-        {s: "FGSS", v: 2474}, {s: "FJCP", v: 2295.26}, {s: "FLJ-1", v: 1201.24}, 
-        {s: "FMT", v: 1051.13}, {s: "FSJ-1", v: 1201.24}, {s: "FSJ-3", v: 1201.24}, {s: "RG", v: 2462.9}
-    ];
+/* ==========================================
+   STREAMING_CHUNK: Definindo gatilhos UX e Toast Notifications...
+   ========================================== */
+function mostrarToast(mensagem, tipo = 'success') {
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-message');
+    
+    toast.className = `toast-notification ${tipo} show`;
+    toastMsg.innerText = mensagem;
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 4000);
+}
 
-    function formatarMoeda(valor) {
-        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+// Helper para redimensionamento automático de caixas de texto (Textarea)
+function ajustarAlturaTextarea(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+}
+
+/* ==========================================
+   STREAMING_CHUNK: Programando a lógica dinâmica de linhas...
+   ========================================== */
+function adicionarLinha(tipo) {
+    const container = document.getElementById(`container-${tipo}`);
+    const box = document.createElement('div');
+    box.className = 'linha-cargo-box';
+
+    box.innerHTML = `
+        <input type="number" class="qtd-${tipo} calibri-values" value="1" min="1" oninput="calcularTransformacao()">
+        <div class="dropdown-combobox">
+            <textarea class="busca-input" placeholder="Clique p/ listar tudo / Digite para filtrar..."
+                onfocus="abrirListaCompleta(this, '${tipo}'); ajustarAlturaTextarea(this);"
+                oninput="filtrarListaAoDigitar(this, '${tipo}'); ajustarAlturaTextarea(this);"
+                rows="1"></textarea>
+            <div class="sugestoes-lista"></div>
+        </div>
+        <button class="btn-remover" onclick="removerLinha(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+    `;
+
+    container.appendChild(box);
+    calcularTransformacao();
+}
+
+function removerLinha(botao) {
+    const painelPai = botao.closest('.painel');
+    botao.closest('.linha-cargo-box').remove();
+    if (painelPai.classList.contains('painel-origem')) {
+        sincronizarTravaDestino();
     }
+    calcularTransformacao();
+}
 
-    // Gera o HTML interno do Select com base em um filtro ("comissionado", "funcao" ou "todos")
-    function gerarOptionsCargos(filtro = "todos") {
-        let html = '<option value="0" data-valor="0" data-tipo="nenhum">Selecione...</option>';
-        
-        if (filtro === "todos" || filtro === "comissionado") {
-            html += '<optgroup label="Cargos Comissionados">';
-            comissionadosData.forEach(c => {
-                html += `<option value="${c.s}" data-valor="${c.r}" data-tipo="comissionado">💼 ${c.s} (${formatarMoeda(c.r * FATOR_ATUALIZACAO)})</option>`;
-            });
-            html += '</optgroup>';
-        }
+function abrirListaCompleta(input, tipoPainel) {
+    document.querySelectorAll('.sugestoes-lista').forEach(l => l.style.display = 'none');
+    const lista = input.parentElement.querySelector('.sugestoes-lista');
+    lista.style.display = 'block';
+    const trava = (tipoPainel === 'destino') ? obterFiltroTrava() : 'todos';
+    
+    // Passa "" (vazio) para renderizar a lista inteira imediatamente ao focar
+    renderizarDropdownCustomizado(lista, tipoPainel, "", trava);
+    
+    // Seleciona o texto completo para que qualquer digitação substitua o texto original sem precisar apagar
+    input.select();
+}
 
-        if (filtro === "todos" || filtro === "funcao") {
-            html += '<optgroup label="Funções Gratificadas">';
-            funcoesGratificadasData.forEach(f => {
-                html += `<option value="${f.s}" data-valor="${f.v}" data-tipo="funcao">🎗️ ${f.s} (${formatarMoeda(f.v * FATOR_ATUALIZACAO)})</option>`;
-            });
-            html += '</optgroup>';
-        }
+function filtrarListaAoDigitar(input, tipoPainel) {
+    const lista = input.parentElement.querySelector('.sugestoes-lista');
+    lista.style.display = 'block';
+    const trava = (tipoPainel === 'destino') ? obterFiltroTrava() : 'todos';
+    renderizarDropdownCustomizado(lista, tipoPainel, input.value, trava);
+}
 
-        return html;
-    }
+/* ==========================================
+   STREAMING_CHUNK: Renderizando componentes de pesquisa...
+   ========================================== */
+function renderizarDropdownCustomizado(listaElement, tipoPainel, termo, trava) {
+    const busca = termo.toLowerCase().trim();
+    let html = '';
 
-    function adicionarLinha(tipo) {
-        const container = document.getElementById(`container-${tipo}`);
-        const div = document.createElement('div');
-        div.className = 'linha-cargo';
-        
-        // Verifica se já existe uma trava ativa para aplicar a mesma estrutura
-        const filtroAtual = obterFiltroTrava();
-        const optionsHTML = (tipo === 'destino') ? gerarOptionsCargos(filtroAtual) : gerarOptionsCargos('todos');
+    if (trava === "todos" || trava === "comissionado") {
+        let itensCom = '';
+        comissionadosData.forEach(c => {
+            const valorRef = valoresComissionadosRef[c.s] || 0;
+            const matchSigla = c.s.toLowerCase().includes(busca);
+            const matchNome = c.n.toLowerCase().includes(busca);
 
-        div.innerHTML = `
-            <input type="number" class="qtd-${tipo}" value="1" min="1" oninput="calcularTransformacao()">
-            <select class="tipo-${tipo}" onchange="gerenciarTrava(this)">
-                ${optionsHTML}
-            </select>
-            <button class="btn-remover" onclick="removerLinha(this)">X</button>
-        `;
-        
-        container.appendChild(div);
-        calcularTransformacao();
-    }
-
-    function removerLinha(botao) {
-        const painelPai = botao.closest('.painel');
-        botao.parentElement.remove();
-        
-        // Se removeu da origem, reavalia a trava restritiva
-        if (painelPai.classList.contains('painel-origem')) {
-            reaplicarTravaDestino();
-        }
-        calcularTransformacao();
-    }
-
-    // Descobre qual o tipo predominante selecionado na origem
-    function obterFiltroTrava() {
-        const selectsOrigem = document.querySelectorAll('.tipo-origem');
-        for (let select of selectsOrigem) {
-            const tipo = select.options[select.selectedIndex].getAttribute('data-tipo');
-            if (tipo === 'comissionado' || tipo === 'funcao') {
-                return tipo; // Retorna o primeiro tipo válido encontrado
-            }
-        }
-        return "todos";
-    }
-
-    // Dispara sempre que houver alteração na Origem
-    function gerenciarTrava(selectAlterado) {
-        if (selectAlterado.classList.contains('tipo-origem')) {
-            reaplicarTravaDestino();
-        }
-        calcularTransformacao();
-    }
-
-    // Força o redesenho dos campos de destino baseando-se na trava ativa da Origem
-    function reaplicarTravaDestino() {
-        const filtro = obterFiltroTrava();
-        const selectsDestino = document.querySelectorAll('.tipo-destino');
-
-        selectsDestino.forEach(select => {
-            const valorSelecionado = select.value;
-            select.innerHTML = gerarOptionsCargos(filtro);
-            
-            // Tenta manter o valor anteriormente selecionado se ele ainda for válido no filtro
-            select.value = valorSelecionado;
-            if (select.selectedIndex === -1) { 
-                select.value = "0"; // Reseta caso a opção tenha sumido pelo filtro
+            if (busca === "" || matchSigla || matchNome) {
+                itensCom += `
+                    <div class="sugestao-item" data-codigo="${c.s}" data-valor="${valorRef}" data-tipo="comissionado" data-label="🔸 [${c.s}] ${c.n} (${formatarMoeda(valorRef * FATOR_ATUALIZACAO)})" onclick="selecionarOpcao(this, '${tipoPainel}')">
+                        <span>🔸 <strong>${c.s}</strong> - <small>${c.n}</small></span>
+                        <span class="valor-label calibri-values">${formatarMoeda(valorRef * FATOR_ATUALIZACAO)}</span>
+                    </div>`;
             }
         });
+        if (itensCom) {
+            html += '<div class="sugestoes-grupo">Cargos Comissionados</div>' + itensCom;
+        }
     }
 
-    function calcularTransformacao() {
-        let totalCredito = 0;
-        let totalCusto = 0;
-
-        // 1. Calcular Origem (Extintos)
-        const qtdOrigem = document.querySelectorAll('.qtd-origem');
-        const tipoOrigem = document.querySelectorAll('.tipo-origem');
-        qtdOrigem.forEach((input, index) => {
-            const qtd = parseInt(input.value) || 0;
-            const select = tipoOrigem[index];
-            if(select) {
-                const valorBase = parseFloat(select.options[select.selectedIndex].getAttribute('data-valor')) || 0;
-                totalCredito += qtd * (valorBase * FATOR_ATUALIZACAO);
+    if (trava === "todos" || trava === "funcao") {
+        let itensFun = '';
+        funcoesGratificadasData.forEach(f => {
+            const matchSigla = f.s.toLowerCase().includes(busca);
+            const matchNome = f.n.toLowerCase().includes(busca);
+            if (busca === "" || matchSigla || matchNome) {
+                itensFun += `
+                    <div class="sugestao-item" data-codigo="${f.s}" data-valor="${f.v}" data-tipo="funcao" data-label="🔹 [${f.s}] ${f.n} (${formatarMoeda(f.v * FATOR_ATUALIZACAO)})" onclick="selecionarOpcao(this, '${tipoPainel}')">
+                        <span>🔹 <strong>${f.s}</strong> - <small>${f.n}</small></span>
+                        <span class="valor-label calibri-values">${formatarMoeda(f.v * FATOR_ATUALIZACAO)}</span>
+                    </div>`;
             }
         });
+        if (itensFun) {
+            html += '<div class="sugestoes-grupo">Funções Gratificadas</div>' + itensFun;
+        }
+    }
 
-        // 2. Calcular Destino (Criados)
-        const qtdDestino = document.querySelectorAll('.qtd-destino');
-        const tipoDestino = document.querySelectorAll('.tipo-destino');
-        qtdDestino.forEach((input, index) => {
-            const qtd = parseInt(input.value) || 0;
-            const select = tipoDestino[index];
-            if(select) {
-                const valorBase = parseFloat(select.options[select.selectedIndex].getAttribute('data-valor')) || 0;
-                totalCusto += qtd * (valorBase * FATOR_ATUALIZACAO);
-            }
-        });
+    if (!html) {
+        html = '<div style="padding:16px; color:#999; font-size:13px; text-align:center; font-style:italic;">Nenhum cargo/função encontrado...</div>';
+    }
 
-        // 3. Resultados Consolidados
-        const saldo = totalCredito - totalCusto;
+    listaElement.innerHTML = html;
+}
 
-        document.getElementById('val-credito').innerText = formatarMoeda(totalCredito);
-        document.getElementById('val-custo').innerText = formatarMoeda(totalCusto);
-        document.getElementById('val-saldo').innerText = formatarMoeda(saldo);
+function selecionarOpcao(itemElement, tipoPainel) {
+    const combobox = itemElement.closest('.dropdown-combobox');
+    const input = combobox.querySelector('.busca-input');
+    const lista = combobox.querySelector('.sugestoes-lista');
 
-        const msgBox = document.getElementById('status-mensagem');
-        if (totalCredito === 0 && totalCusto === 0) {
-            msgBox.style.display = "none";
+    input.value = itemElement.getAttribute('data-label');
+    input.setAttribute('data-valor', itemElement.getAttribute('data-valor'));
+    input.setAttribute('data-tipo', itemElement.getAttribute('data-tipo'));
+    input.setAttribute('data-codigo', itemElement.getAttribute('data-codigo'));
+
+    lista.style.display = 'none';
+
+    // Garante que a altura da caixa se expanda para cobrir o texto inteiro selecionado
+    ajustarAlturaTextarea(input);
+
+    if (tipoPainel === 'origem') {
+        sincronizarTravaDestino();
+    }
+    calcularTransformacao();
+}
+
+function obterFiltroTrava() {
+    const inputsOrigem = document.querySelectorAll('#container-origem .busca-input');
+    for (let input of inputsOrigem) {
+        const tipo = input.getAttribute('data-tipo');
+        if (tipo === 'comissionado' || tipo === 'funcao') {
+            return tipo;
+        }
+    }
+    return "todos";
+}
+
+function sincronizarTravaDestino() {
+    const trava = obterFiltroTrava();
+    const inputsDestino = document.querySelectorAll('#container-destino .busca-input');
+
+    inputsDestino.forEach(input => {
+        const tipoAtual = input.getAttribute('data-tipo');
+        if (trava !== 'todos' && tipoAtual && tipoAtual !== trava) {
+            input.value = '';
+            input.removeAttribute('data-valor');
+            input.removeAttribute('data-tipo');
+            input.removeAttribute('data-codigo');
+            ajustarAlturaTextarea(input);
+        }
+    });
+}
+
+/* ==========================================
+   STREAMING_CHUNK: Calculando a transformação e formatando balanço financeiro...
+   ========================================== */
+function calcularTransformacao() {
+    let totalCredito = 0;
+    let totalCusto = 0;
+    let temOrigem = false;
+    let temDestino = false;
+
+    const boxesOrigem = document.querySelectorAll('#container-origem .linha-cargo-box');
+    boxesOrigem.forEach(box => {
+        const qtd = parseInt(box.querySelector('input[type="number"]').value) || 0;
+        const valor = parseFloat(box.querySelector('.busca-input').getAttribute('data-valor')) || 0;
+        totalCredito += qtd * (valor * FATOR_ATUALIZACAO);
+        if (valor > 0) temOrigem = true;
+    });
+
+    const boxesDestino = document.querySelectorAll('#container-destino .linha-cargo-box');
+    boxesDestino.forEach(box => {
+        const qtd = parseInt(box.querySelector('input[type="number"]').value) || 0;
+        const valor = parseFloat(box.querySelector('.busca-input').getAttribute('data-valor')) || 0;
+        totalCusto += qtd * (valor * FATOR_ATUALIZACAO);
+        if (valor > 0) temDestino = true;
+    });
+
+    const saldo = totalCredito - totalCusto;
+
+    document.getElementById('val-credito').innerText = totalCredito.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById('val-custo').innerText = totalCusto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById('val-saldo').innerText = saldo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    const msgBox = document.getElementById('status-mensagem');
+    
+    // Só exibe o balanço de viabilidade quando houver escolha válida de ambos os lados
+    if (temOrigem && temDestino) {
+        msgBox.style.display = "block";
+        
+        // Cálculo técnico dos percentuais de eficiência
+        const pctEconomia = totalCredito > 0 ? ((saldo / totalCredito) * 100).toFixed(2).replace('.', ',') : '0,00';
+        const pctDeficit = totalCredito > 0 ? ((Math.abs(saldo) / totalCredito) * 100).toFixed(2).replace('.', ',') : (totalCusto > 0 ? '100,00' : '0,00');
+        const pctConsumo = totalCredito > 0 ? ((totalCusto / totalCredito) * 100).toFixed(2).replace('.', ',') : (totalCusto > 0 ? '100,00' : '0,00');
+
+        if (saldo >= 0) {
+            msgBox.className = "saldo-status status-positivo";
+            msgBox.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.25); padding-bottom: 8px;">
+                        <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; opacity: 0.9;">Parecer de Viabilidade Técnica</span>
+                        <span style="background: rgba(255,255,255,0.25); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 1px;">VIÁVEL</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center;">
+                        <div>
+                            <span style="font-size: 11px; text-transform: uppercase; opacity: 0.8; display: block; margin-bottom: 4px;">Saldo Técnico Remanescente</span>
+                            <span style="font-size: 22px; font-weight: 800; letter-spacing: -0.5px; display: block;">${saldo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                        </div>
+                        <div style="border-left: 1px solid rgba(255,255,255,0.25); padding-left: 20px;">
+                            <span style="font-size: 11px; text-transform: uppercase; opacity: 0.8; display: block; margin-bottom: 4px;">Métricas Orçamentárias</span>
+                            <span style="font-size: 13px; font-weight: 600; display: block; line-height: 1.45;">
+                                • Eficiência Gerada: <strong style="font-weight: 800;">+${pctEconomia}%</strong> do crédito<br>
+                                • Utilização da Margem: <strong style="font-weight: 800;">${pctConsumo}%</strong>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
         } else {
-            msgBox.style.display = "block";
-            if (saldo >= 0) {
-                msgBox.className = "saldo-status status-positivo";
-                msgBox.innerHTML = `✅ OPERAÇÃO VIÁVEL<br><small>Saldo Remanescente: ${formatarMoeda(saldo)}</small>`;
-            } else {
-                msgBox.className = "saldo-status status-negativo";
-                msgBox.innerHTML = `❌ IMPACTO FINANCEIRO EXCEDIDO<br><small>Necessita de dotação orçamentária complementar de: ${formatarMoeda(Math.abs(saldo))}</small>`;
-            }
+            msgBox.className = "saldo-status status-negativo";
+            msgBox.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.25); padding-bottom: 8px;">
+                        <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; opacity: 0.9;">Parecer de Viabilidade Técnica</span>
+                        <span style="background: rgba(255,255,255,0.25); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 1px;">EXCEDIDO</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center;">
+                        <div>
+                            <span style="font-size: 11px; text-transform: uppercase; opacity: 0.8; display: block; margin-bottom: 4px;">Dotação Complementar Necessária</span>
+                            <span style="font-size: 22px; font-weight: 800; letter-spacing: -0.5px; display: block;">${Math.abs(saldo).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                        </div>
+                        <div style="border-left: 1px solid rgba(255,255,255,0.25); padding-left: 20px;">
+                            <span style="font-size: 11px; text-transform: uppercase; opacity: 0.8; display: block; margin-bottom: 4px;">Métricas de Impacto</span>
+                            <span style="font-size: 13px; font-weight: 600; display: block; line-height: 1.45;">
+                                • Déficit Gerado: <strong style="color: #FFEEOO; font-weight: 800;">+${pctDeficit}%</strong> do limite<br>
+                                • Demanda Orçamentária: <strong style="color: #FFEEOO; font-weight: 800;">${pctConsumo}%</strong> do crédito
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
+    } else {
+        msgBox.style.display = "none";
     }
+}
 
-    window.onload = function() {
-        adicionarLinha('origem');
-        adicionarLinha('destino');
+/* ==========================================
+   STREAMING_CHUNK: Implementando exportação de imagem...
+   ========================================== */
+function exportarComoImagem() {
+    const containerElement = document.getElementById("conteudo-projeto");
+    const acoesLayout = document.querySelector(".acoes-inferiores");
+
+    // Oculta temporariamente elementos não-imprimíveis
+    acoesLayout.style.opacity = "0";
+
+    html2canvas(containerElement, {
+        scale: 2, // Resolução premium
+        backgroundColor: "#071729", // Combina com o gradiente de fundo institucional
+        useCORS: true
+    }).then(canvas => {
+        acoesLayout.style.opacity = "1";
+
+        const link = document.createElement("a");
+        link.download = "Proposta_Transformacao_Cargos_TJPE.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        
+        mostrarToast("Proposta exportada como imagem com sucesso!", "success");
+    }).catch(err => {
+        acoesLayout.style.opacity = "1";
+        mostrarToast("Erro ao tentar gerar imagem da proposta.", "danger");
+    });
+}
+
+// Fechamento de listas ao clicar fora
+document.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('busca-input')) {
+        document.querySelectorAll('.sugestoes-lista').forEach(lista => {
+            lista.style.display = 'none';
+        });
     }
+});
+
+window.onload = function() {
+    adicionarLinha('origem');
+    adicionarLinha('destino');
+}
 </script>
-
 </body>
-</html>
+</html>10:49 27/05/2026
