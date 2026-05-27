@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transformação de Cargos e Funções - TJPE</title>
     <style>
         /* ==========================================
-           STREAMING_CHUNK: Definindo tokens de estilo e cores institucionais...
+           DEFINIÇÃO DE TOKENS E CORES INSTITUCIONAIS
            ========================================== */
         :root {
             /* Cores Oficiais do Manual */
@@ -28,7 +28,7 @@
         }
 
         /* ==========================================
-           STREAMING_CHUNK: Configurando tipografia e regras globais...
+           CONFIGURAÇÕES TIPOGRÁFICAS GLOBAIS
            ========================================== */
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -43,17 +43,17 @@
             color: var(--text-dark);
         }
 
-        /* Estilo para valores numéricos e tabelas conforme manual (Calibri) */
+        /* Estilo para valores numéricos e tabelas (Calibri) */
         .calibri-values {
             font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
         }
 
         /* ==========================================
-           STREAMING_CHUNK: Estruturando o container principal...
+           ESTRUTURAÇÃO DO CONTAINER PRINCIPAL
            ========================================== */
         .container {
             width: 100%;
-            max-width: 1200px; /* Expandido para dar mais espaço lateral aos nomes dos cargos e funções */
+            max-width: 1250px; /* Expandido para dar mais espaço lateral aos nomes e novos controlos */
             background: var(--card-bg);
             border-radius: 16px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
@@ -76,7 +76,7 @@
             pointer-events: none;
         }
 
-        /* Cabecalho */
+        /* Cabeçalho */
         .header {
             text-align: center;
             margin-bottom: 35px;
@@ -94,7 +94,7 @@
         }
 
         /* ==========================================
-           STREAMING_CHUNK: Configurando grid de simulação dos painéis...
+           GRID DE SIMULAÇÃO DOS PAINÉIS
            ========================================== */
         .simulador-grid {
             display: grid;
@@ -170,10 +170,9 @@
             padding: 14px;
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            display: grid;
-            grid-template-columns: 85px 1fr 45px;
-            gap: 12px;
-            align-items: center;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             position: relative;
             box-shadow: 0 2px 4px rgba(0,0,0,0.03);
             transition: border-color 0.2s;
@@ -189,13 +188,21 @@
             z-index: 40;
         }
 
+        .linha-top {
+            display: grid;
+            grid-template-columns: 85px 1fr 45px;
+            gap: 12px;
+            width: 100%;
+            align-items: center;
+        }
+
         .dropdown-combobox {
             position: relative;
             width: 100%;
         }
 
         /* ==========================================
-           STREAMING_CHUNK: Estilizando campos de formulário e buscas...
+           ESTILIZAÇÃO DOS CAMPOS DE FORMULÁRIO E BUSCAS
            ========================================== */
         input[type="number"], .busca-input {
             padding: 10px 14px;
@@ -221,7 +228,7 @@
             box-shadow: 0 0 0 3px rgba(0, 68, 136, 0.15);
         }
 
-        /* Customização para Textarea de busca (Permite a quebra de linha completa) */
+        /* Customização para Textarea de busca */
         textarea.busca-input {
             height: auto;
             min-height: 44px;
@@ -329,7 +336,72 @@
             white-space: nowrap;
         }
 
-        /* Botões */
+        /* ==========================================
+           CONTROLOS PREMIUM DE PROVIMENTO (SLIDE TOGGLE) - CENTRADO PERFEITO
+           ========================================== */
+        .toggle-switch-container {
+            position: relative;
+            display: inline-flex;
+            background: #E5E7EB;
+            border-radius: 9999px;
+            padding: 3px;
+            width: 144px;
+            height: 32px;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            user-select: none;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+            box-sizing: border-box;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 68px;
+            height: calc(100% - 6px); /* Dimensionamento perfeitamente proporcional */
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 9999px;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+            box-shadow: 0 2px 4px rgba(0, 44, 136, 0.25), 0 1px 2px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+        
+        .toggle-btn {
+            flex: 1;
+            text-align: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            z-index: 2;
+            background: none;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            padding: 0;
+            height: 100%;
+            text-transform: uppercase;
+            transition: color 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.6px;
+            box-sizing: border-box;
+        }
+        
+        .toggle-btn:not(.active):hover {
+            color: var(--primary-dark);
+        }
+        
+        .toggle-btn.active {
+            color: var(--white);
+            font-weight: 800;
+        }
+
+        /* Botões Gerais */
         .btn-remover {
             background: #FEE2E2;
             color: var(--danger);
@@ -376,7 +448,7 @@
         }
 
         /* ==========================================
-           STREAMING_CHUNK: Definindo blocos de resultados e balanço...
+           BLOCOS DE RESULTADOS E BALANÇO FINANCEIRO
            ========================================== */
         .resultado-box {
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
@@ -441,7 +513,7 @@
             font-weight: 700;
         }
 
-        /* Mensagens de Validação e Viabilidade Técnicas (Sólidas e Profissionais) */
+        /* Mensagens de Validação e Viabilidade Técnicas */
         .saldo-status {
             padding: 20px;
             border-radius: 10px;
@@ -463,7 +535,7 @@
         }
 
         /* ==========================================
-           STREAMING_CHUNK: Estruturando ações inferiores e rodapé...
+           AÇÕES INFERIORES E RODAPÉ
            ========================================== */
         .acoes-inferiores {
             display: flex;
@@ -511,9 +583,7 @@
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
 
-        /* ==========================================
-           TOAST NOTIFICATION (SISTEMA SEM ALERTS)
-           ========================================== */
+        /* TOAST NOTIFICATION */
         .toast-notification {
             position: fixed;
             bottom: 30px;
@@ -590,9 +660,7 @@
         <h1>Transformação de Cargos e Funções</h1>
     </div>
 
-    <!-- ==========================================
-       STREAMING_CHUNK: Painéis Laterais de Simulação...
-       ========================================== -->
+    <!-- Painéis Laterais de Simulação -->
     <div class="simulador-grid">
         <!-- Origem -->
         <div class="painel painel-origem">
@@ -621,9 +689,7 @@
         </div>
     </div>
 
-    <!-- ==========================================
-       STREAMING_CHUNK: Painel consolidado de resultados...
-       ========================================== -->
+    <!-- Painel consolidado de resultados -->
     <div class="resultado-box">
         <div class="resultado-box-title">Balanço Financeiro da Proposta</div>
         <div class="resultado-valores calibri-values">
@@ -674,15 +740,28 @@
 
 <script>
 /* ==========================================
-   STREAMING_CHUNK: Inicializando base de dados comissionados e gratificações...
+   INICIALIZAÇÃO DA BASE DE DADOS COMPLETA CONFORME MANUAL OFICIAL
    ========================================== */
 const FATOR_ATUALIZACAO = 1.053;
+
+// Valores Base e Representação originais mapeados diretamente da tabela (Sem o fator de 1.053 pré-aplicado)
 const valoresComissionadosRef = {
-    "DGAPJC": 14712.82, "DGPJC": 15693.68, "DASPJC": 8433.71, "DSPJC": 9108.42,
-    "MPJC": 7871.22, "SPJC": 10795.26, "APJC": 1583.72, "PJC": 10120.46,
-    "PJC-II": 9108.42, "PJC-III": 8433.71, "PJC-IV": 5060.16, "PJC-V": 3710.83,
-    "PJC-VI": 3161.65, "PJC-VII": 2719.90
+    "APJC":     { base: 1319.77,  rep: 1583.72  },
+    "DGAPJC":   { base: 12260.68, rep: 14712.82 },
+    "DGPJC":    { base: 13078.07, rep: 15693.68 },
+    "DASPJC":   { base: 7028.09,  rep: 8433.71  },
+    "DSPJC":    { base: 7590.35,  rep: 9108.42  },
+    "MPJC":     { base: 6559.35,  rep: 7871.22  },
+    "PJC":      { base: 8433.72,  rep: 10120.46 },
+    "PJC-II":   { base: 7590.35,  rep: 9108.42  },
+    "PJC-III":  { base: 7028.09,  rep: 8433.71  },
+    "PJC-IV":   { base: 4216.80,  rep: 5060.16  },
+    "PJC-V":    { base: 3092.36,  rep: 3710.83  },
+    "PJC-VI":   { base: 2634.71,  rep: 3161.65  },
+    "PJC-VII":  { base: 2266.58,  rep: 2719.90  },
+    "SPJC":     { base: 8996.05,  rep: 10795.26 }
 };
+
 const comissionadosData = [
     {n: "ADMINISTRADOR AUXILIAR DO PRÉDIO DO FÓRUM DA COMARCA DE PETROLINA", s: "PJC-V"},
     {n: "ADMINISTRADOR AUXILIAR DO PRÉDIO", s: "PJC-V"},
@@ -790,6 +869,7 @@ const comissionadosData = [
     {n: "SUPERVISOR TÉCNICO JUIZADOS ESPECIAIS", s: "PJC-IV"},
     {n: "SUPERVISOR TÉCNICO VARA REGIONAL INFÂNCIA E JUVENTUDE/1ª", s: "PJC-IV"}
 ];
+
 const funcoesGratificadasData = [
     {n: "ADMINISTRADOR DO FORO", s: "FSJ-3", v: 1201.24},
     {n: "APOIO ATIVIDADE JURISDICIONAL 1º GRAU", s: "FAP-AJ1G", v: 635.36},
@@ -887,7 +967,7 @@ function formatarMoeda(valor) {
 }
 
 /* ==========================================
-   STREAMING_CHUNK: Definindo gatilhos UX e Toast Notifications...
+   GATILHOS UX E NOTIFICAÇÕES TOAST
    ========================================== */
 function mostrarToast(mensagem, tipo = 'success') {
     const toast = document.getElementById('toast');
@@ -901,14 +981,88 @@ function mostrarToast(mensagem, tipo = 'success') {
     }, 4000);
 }
 
-// Helper para redimensionamento automático de caixas de texto (Textarea)
+// Redimensionamento automático do Textarea para cobrir o texto longo
 function ajustarAlturaTextarea(textarea) {
     textarea.style.height = 'auto';
     textarea.style.height = textarea.scrollHeight + 'px';
 }
 
 /* ==========================================
-   STREAMING_CHUNK: Programando a lógica dinâmica de linhas...
+   CONTROLES DO SELETOR DE VÍNCULO DESLIZANTE
+   ========================================== */
+function setVinculo(button, value) {
+    const box = button.closest('.linha-cargo-box');
+    const toggleContainer = button.parentElement;
+    const slider = toggleContainer.querySelector('.toggle-slider');
+    const buttons = toggleContainer.querySelectorAll('.toggle-btn');
+    
+    buttons.forEach(btn => btn.classList.remove('active'));
+    button.classList.add('active');
+    
+    if (value === 'puro') {
+        slider.style.transform = 'translateX(0)';
+    } else {
+        slider.style.transform = 'translateX(68px)';
+    }
+    
+    box.setAttribute('data-vinculo', value);
+    
+    atualizarValoresBreakdown(box);
+    calcularTransformacao();
+}
+
+function atualizarValoresBreakdown(box) {
+    const input = box.querySelector('.busca-input');
+    const baseVal = parseFloat(input.getAttribute('data-base')) || 0;
+    const repVal = parseFloat(input.getAttribute('data-rep')) || 0;
+    
+    const baseAtualizada = baseVal * FATOR_ATUALIZACAO;
+    const repAtualizada = repVal * FATOR_ATUALIZACAO;
+    const totalAtualizado = baseAtualizada + repAtualizada;
+    
+    const vinculo = box.getAttribute('data-vinculo') || 'puro';
+    
+    const baseSpan = box.querySelector('.v-base');
+    const repSpan = box.querySelector('.v-rep');
+    const totalSpan = box.querySelector('.v-total');
+    
+    if (baseSpan && repSpan && totalSpan) {
+        baseSpan.innerText = formatarMoeda(baseAtualizada);
+        repSpan.innerText = formatarMoeda(repAtualizada);
+        totalSpan.innerText = formatarMoeda(totalAtualizado);
+        
+        // Destaca dinamicamente qual componente está ativo no cálculo orçamentário
+        if (vinculo === 'puro') {
+            baseSpan.style.color = 'var(--text-dark)';
+            baseSpan.style.textDecoration = 'none';
+            baseSpan.style.opacity = '1';
+            
+            repSpan.style.color = 'var(--text-dark)';
+            repSpan.style.textDecoration = 'none';
+            repSpan.style.opacity = '1';
+            
+            totalSpan.style.color = 'var(--success)';
+            totalSpan.style.textDecoration = 'none';
+            totalSpan.style.opacity = '1';
+        } else {
+            // Caso Efetivo - Salário Base e Total do cargo são riscados do cálculo
+            baseSpan.style.color = 'var(--text-muted)';
+            baseSpan.style.textDecoration = 'line-through';
+            baseSpan.style.opacity = '0.5';
+            
+            repSpan.style.color = 'var(--success)';
+            repSpan.style.textDecoration = 'none';
+            repSpan.style.opacity = '1';
+            
+            totalSpan.style.color = 'var(--text-muted)';
+            totalSpan.style.textDecoration = 'line-through';
+            totalSpan.style.opacity = '0.5';
+        }
+    }
+}
+
+/* ==========================================
+   LÓGICA DINÂMICA DE LINHAS DO SIMULADOR
    ========================================== */
 function adicionarLinha(tipo) {
     const container = document.getElementById(`container-${tipo}`);
@@ -916,17 +1070,38 @@ function adicionarLinha(tipo) {
     box.className = 'linha-cargo-box';
 
     box.innerHTML = `
-        <input type="number" class="qtd-${tipo} calibri-values" value="1" min="1" oninput="calcularTransformacao()">
-        <div class="dropdown-combobox">
-            <textarea class="busca-input" placeholder="Clique p/ listar tudo / Digite para filtrar..."
-                onfocus="abrirListaCompleta(this, '${tipo}'); ajustarAlturaTextarea(this);"
-                oninput="filtrarListaAoDigitar(this, '${tipo}'); ajustarAlturaTextarea(this);"
-                rows="1"></textarea>
-            <div class="sugestoes-lista"></div>
+        <div class="linha-top">
+            <input type="number" class="qtd-${tipo} calibri-values" value="1" min="1" oninput="calcularTransformacao()">
+            <div class="dropdown-combobox">
+                <textarea class="busca-input" placeholder="Clique p/ listar tudo / Digite para filtrar..."
+                    onfocus="abrirListaCompleta(this, '${tipo}'); ajustarAlturaTextarea(this);"
+                    oninput="filtrarListaAoDigitar(this, '${tipo}'); ajustarAlturaTextarea(this);"
+                    rows="1"></textarea>
+                <div class="sugestoes-lista"></div>
+            </div>
+            <button class="btn-remover" onclick="removerLinha(this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
         </div>
-        <button class="btn-remover" onclick="removerLinha(this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
+        
+        <!-- Detalhamento de valores comissionados e seletor slide -->
+        <div class="detalhes-comissionado" style="display: none; padding-top: 10px; border-top: 1px dashed var(--border-color); justify-content: space-between; align-items: center; width: 100%; gap: 15px; flex-wrap: wrap;">
+            <!-- Seletor do Vínculo -->
+            <div class="vinculo-selector" style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Provimento:</span>
+                <div class="toggle-switch-container">
+                    <div class="toggle-slider"></div>
+                    <button type="button" onclick="setVinculo(this, 'puro')" class="toggle-btn active">Puro</button>
+                    <button type="button" onclick="setVinculo(this, 'efetivo')" class="toggle-btn">Efetivo</button>
+                </div>
+            </div>
+            <!-- Detalhamento dos valores -->
+            <div class="valores-breakdown" style="font-size: 12px; font-family: 'Calibri', sans-serif; text-align: right; color: var(--text-muted);">
+                Base: <span class="v-base" style="font-weight: 700;">R$ 0,00</span> | 
+                Repr: <span class="v-rep" style="font-weight: 700;">R$ 0,00</span> | 
+                Custo Total Ref.: <span class="v-total" style="font-weight: 700;">R$ 0,00</span>
+            </div>
+        </div>
     `;
 
     container.appendChild(box);
@@ -948,10 +1123,7 @@ function abrirListaCompleta(input, tipoPainel) {
     lista.style.display = 'block';
     const trava = (tipoPainel === 'destino') ? obterFiltroTrava() : 'todos';
     
-    // Passa "" (vazio) para renderizar a lista inteira imediatamente ao focar
     renderizarDropdownCustomizado(lista, tipoPainel, "", trava);
-    
-    // Seleciona o texto completo para que qualquer digitação substitua o texto original sem precisar apagar
     input.select();
 }
 
@@ -963,7 +1135,7 @@ function filtrarListaAoDigitar(input, tipoPainel) {
 }
 
 /* ==========================================
-   STREAMING_CHUNK: Renderizando componentes de pesquisa...
+   RENDERIZAÇÃO DOS COMPONENTES DE PESQUISA
    ========================================== */
 function renderizarDropdownCustomizado(listaElement, tipoPainel, termo, trava) {
     const busca = termo.toLowerCase().trim();
@@ -972,15 +1144,29 @@ function renderizarDropdownCustomizado(listaElement, tipoPainel, termo, trava) {
     if (trava === "todos" || trava === "comissionado") {
         let itensCom = '';
         comissionadosData.forEach(c => {
-            const valorRef = valoresComissionadosRef[c.s] || 0;
+            const ref = valoresComissionadosRef[c.s] || { base: 0, rep: 0 };
+            const valorPuro = (ref.base + ref.rep) * FATOR_ATUALIZACAO;
+            const valorEfetivo = ref.rep * FATOR_ATUALIZACAO;
+            
             const matchSigla = c.s.toLowerCase().includes(busca);
             const matchNome = c.n.toLowerCase().includes(busca);
 
             if (busca === "" || matchSigla || matchNome) {
                 itensCom += `
-                    <div class="sugestao-item" data-codigo="${c.s}" data-valor="${valorRef}" data-tipo="comissionado" data-label="🔸 [${c.s}] ${c.n} (${formatarMoeda(valorRef * FATOR_ATUALIZACAO)})" onclick="selecionarOpcao(this, '${tipoPainel}')">
-                        <span>🔸 <strong>${c.s}</strong> - <small>${c.n}</small></span>
-                        <span class="valor-label calibri-values">${formatarMoeda(valorRef * FATOR_ATUALIZACAO)}</span>
+                    <div class="sugestao-item" 
+                         data-codigo="${c.s}" 
+                         data-base="${ref.base}" 
+                         data-rep="${ref.rep}" 
+                         data-tipo="comissionado" 
+                         data-label="🔸 [${c.s}] ${c.n}" 
+                         onclick="selecionarOpcao(this, '${tipoPainel}')">
+                        <div style="display: flex; flex-direction: column; width: 100%;">
+                            <span style="font-size: 13px;">🔸 <strong>${c.s}</strong> - <small>${c.n}</small></span>
+                            <span style="font-size: 11px; color: var(--text-muted); margin-top: 4px; display: flex; gap: 15px;">
+                                <span>Puro: <strong style="color: var(--primary); font-family: Calibri;">${formatarMoeda(valorPuro)}</strong></span>
+                                <span>Efetivo: <strong style="color: var(--success); font-family: Calibri;">${formatarMoeda(valorEfetivo)}</strong></span>
+                            </span>
+                        </div>
                     </div>`;
             }
         });
@@ -994,11 +1180,22 @@ function renderizarDropdownCustomizado(listaElement, tipoPainel, termo, trava) {
         funcoesGratificadasData.forEach(f => {
             const matchSigla = f.s.toLowerCase().includes(busca);
             const matchNome = f.n.toLowerCase().includes(busca);
+            const valorAtualizado = f.v * FATOR_ATUALIZACAO;
+
             if (busca === "" || matchSigla || matchNome) {
                 itensFun += `
-                    <div class="sugestao-item" data-codigo="${f.s}" data-valor="${f.v}" data-tipo="funcao" data-label="🔹 [${f.s}] ${f.n} (${formatarMoeda(f.v * FATOR_ATUALIZACAO)})" onclick="selecionarOpcao(this, '${tipoPainel}')">
-                        <span>🔹 <strong>${f.s}</strong> - <small>${f.n}</small></span>
-                        <span class="valor-label calibri-values">${formatarMoeda(f.v * FATOR_ATUALIZACAO)}</span>
+                    <div class="sugestao-item" 
+                         data-codigo="${f.s}" 
+                         data-valor="${f.v}" 
+                         data-tipo="funcao" 
+                         data-label="🔹 [${f.s}] ${f.n}" 
+                         onclick="selecionarOpcao(this, '${tipoPainel}')">
+                        <div style="display: flex; flex-direction: column; width: 100%;">
+                            <span>🔹 <strong>${f.s}</strong> - <small>${f.n}</small></span>
+                            <span style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                                Valor Ref.: <strong style="color: var(--success); font-family: Calibri;">${formatarMoeda(valorAtualizado)}</strong>
+                            </span>
+                        </div>
                     </div>`;
             }
         });
@@ -1015,18 +1212,55 @@ function renderizarDropdownCustomizado(listaElement, tipoPainel, termo, trava) {
 }
 
 function selecionarOpcao(itemElement, tipoPainel) {
-    const combobox = itemElement.closest('.dropdown-combobox');
-    const input = combobox.querySelector('.busca-input');
-    const lista = combobox.querySelector('.sugestoes-lista');
+    const box = itemElement.closest('.linha-cargo-box');
+    const input = box.querySelector('.busca-input');
+    const lista = box.querySelector('.sugestoes-lista');
 
-    input.value = itemElement.getAttribute('data-label');
-    input.setAttribute('data-valor', itemElement.getAttribute('data-valor'));
-    input.setAttribute('data-tipo', itemElement.getAttribute('data-tipo'));
-    input.setAttribute('data-codigo', itemElement.getAttribute('data-codigo'));
-
+    const codigo = itemElement.getAttribute('data-codigo');
+    const tipo = itemElement.getAttribute('data-tipo');
+    const label = itemElement.getAttribute('data-label');
+    
+    input.value = label;
+    input.setAttribute('data-tipo', tipo);
+    input.setAttribute('data-codigo', codigo);
+    
     lista.style.display = 'none';
 
-    // Garante que a altura da caixa se expanda para cobrir o texto inteiro selecionado
+    const detalhesDiv = box.querySelector('.detalhes-comissionado');
+
+    if (tipo === 'comissionado') {
+        const baseVal = parseFloat(itemElement.getAttribute('data-base')) || 0;
+        const repVal = parseFloat(itemElement.getAttribute('data-rep')) || 0;
+        
+        input.setAttribute('data-base', baseVal);
+        input.setAttribute('data-rep', repVal);
+        
+        // Garante que o vínculo seja iniciado ou mantido como "puro"
+        if (!box.getAttribute('data-vinculo')) {
+            box.setAttribute('data-vinculo', 'puro');
+            const toggleContainer = box.querySelector('.toggle-switch-container');
+            if (toggleContainer) {
+                const slider = toggleContainer.querySelector('.toggle-slider');
+                slider.style.transform = 'translateX(0)';
+                toggleContainer.querySelectorAll('.toggle-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.innerText.toLowerCase() === 'puro') btn.classList.add('active');
+                });
+            }
+        }
+        
+        detalhesDiv.style.display = 'flex';
+        atualizarValoresBreakdown(box);
+    } else {
+        // Função gratificada
+        const valorVal = parseFloat(itemElement.getAttribute('data-valor')) || 0;
+        input.setAttribute('data-valor', valorVal);
+        input.removeAttribute('data-base');
+        input.removeAttribute('data-rep');
+        
+        detalhesDiv.style.display = 'none';
+    }
+
     ajustarAlturaTextarea(input);
 
     if (tipoPainel === 'origem') {
@@ -1057,13 +1291,17 @@ function sincronizarTravaDestino() {
             input.removeAttribute('data-valor');
             input.removeAttribute('data-tipo');
             input.removeAttribute('data-codigo');
+            const box = input.closest('.linha-cargo-box');
+            if (box) {
+                box.querySelector('.detalhes-comissionado').style.display = 'none';
+            }
             ajustarAlturaTextarea(input);
         }
     });
 }
 
 /* ==========================================
-   STREAMING_CHUNK: Calculando a transformação e formatando balanço financeiro...
+   CALCULAR TRANSFORMAÇÃO E BALANÇO FINANCEIRO
    ========================================== */
 function calcularTransformacao() {
     let totalCredito = 0;
@@ -1074,17 +1312,53 @@ function calcularTransformacao() {
     const boxesOrigem = document.querySelectorAll('#container-origem .linha-cargo-box');
     boxesOrigem.forEach(box => {
         const qtd = parseInt(box.querySelector('input[type="number"]').value) || 0;
-        const valor = parseFloat(box.querySelector('.busca-input').getAttribute('data-valor')) || 0;
-        totalCredito += qtd * (valor * FATOR_ATUALIZACAO);
-        if (valor > 0) temOrigem = true;
+        const input = box.querySelector('.busca-input');
+        const tipo = input.getAttribute('data-tipo');
+        
+        let valorCalculado = 0;
+        if (tipo === 'comissionado') {
+            const baseVal = parseFloat(input.getAttribute('data-base')) || 0;
+            const repVal = parseFloat(input.getAttribute('data-rep')) || 0;
+            const vinculo = box.getAttribute('data-vinculo') || 'puro';
+            
+            if (vinculo === 'puro') {
+                valorCalculado = (baseVal + repVal) * FATOR_ATUALIZACAO;
+            } else {
+                valorCalculado = repVal * FATOR_ATUALIZACAO;
+            }
+        } else if (tipo === 'funcao') {
+            const valorVal = parseFloat(input.getAttribute('data-valor')) || 0;
+            valorCalculado = valorVal * FATOR_ATUALIZACAO;
+        }
+        
+        totalCredito += qtd * valorCalculado;
+        if (valorCalculado > 0) temOrigem = true;
     });
 
     const boxesDestino = document.querySelectorAll('#container-destino .linha-cargo-box');
     boxesDestino.forEach(box => {
         const qtd = parseInt(box.querySelector('input[type="number"]').value) || 0;
-        const valor = parseFloat(box.querySelector('.busca-input').getAttribute('data-valor')) || 0;
-        totalCusto += qtd * (valor * FATOR_ATUALIZACAO);
-        if (valor > 0) temDestino = true;
+        const input = box.querySelector('.busca-input');
+        const tipo = input.getAttribute('data-tipo');
+        
+        let valorCalculado = 0;
+        if (tipo === 'comissionado') {
+            const baseVal = parseFloat(input.getAttribute('data-base')) || 0;
+            const repVal = parseFloat(input.getAttribute('data-rep')) || 0;
+            const vinculo = box.getAttribute('data-vinculo') || 'puro';
+            
+            if (vinculo === 'puro') {
+                valorCalculado = (baseVal + repVal) * FATOR_ATUALIZACAO;
+            } else {
+                valorCalculado = repVal * FATOR_ATUALIZACAO;
+            }
+        } else if (tipo === 'funcao') {
+            const valorVal = parseFloat(input.getAttribute('data-valor')) || 0;
+            valorCalculado = valorVal * FATOR_ATUALIZACAO;
+        }
+        
+        totalCusto += qtd * valorCalculado;
+        if (valorCalculado > 0) temDestino = true;
     });
 
     const saldo = totalCredito - totalCusto;
@@ -1137,7 +1411,7 @@ function calcularTransformacao() {
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center;">
                         <div>
-                            <span style="font-size: 11px; text-transform: uppercase; opacity: 0.8; display: block; margin-bottom: 4px;">Dotação Complementar Necessária</span>
+                            <span style="font-size: 11px; text-transform: uppercase; opacity: 0.8; display: block; margin-bottom: 4px;">Dotação Complementar Orçamental</span>
                             <span style="font-size: 22px; font-weight: 800; letter-spacing: -0.5px; display: block;">${Math.abs(saldo).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
                         </div>
                         <div style="border-left: 1px solid rgba(255,255,255,0.25); padding-left: 20px;">
@@ -1157,7 +1431,7 @@ function calcularTransformacao() {
 }
 
 /* ==========================================
-   STREAMING_CHUNK: Implementando exportação de imagem...
+   EXPORTAÇÃO DE IMAGEM
    ========================================== */
 function exportarComoImagem() {
     const containerElement = document.getElementById("conteudo-projeto");
@@ -1187,7 +1461,7 @@ function exportarComoImagem() {
 
 // Fechamento de listas ao clicar fora
 document.addEventListener('click', function(e) {
-    if (!e.target.classList.contains('busca-input')) {
+    if (!e.target.closest('.dropdown-combobox') && !e.target.classList.contains('busca-input')) {
         document.querySelectorAll('.sugestoes-lista').forEach(lista => {
             lista.style.display = 'none';
         });
@@ -1200,4 +1474,4 @@ window.onload = function() {
 }
 </script>
 </body>
-</html>10:49 27/05/2026
+</html>
