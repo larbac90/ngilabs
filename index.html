@@ -133,6 +133,76 @@
             font-weight: 600;
             letter-spacing: 1.5px;
         }
+
+        /* ==========================================================================
+           ESTILOS DO NOVO CONTAINER DE NOVIDADES (EDITAR SE PRECISAR MUDAR O VISUAL)
+           ========================================================================== */
+        .wrapper-conteudo {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 30px;
+            width: 100%;
+            max-width: 1130px; /* Soma do max-width dos dois containers + gap */
+        }
+
+        .container-novidades {
+            background-color: #ffffff;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 300px;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border-left: 5px solid #004d61;
+            text-align: left;
+        }
+
+        .container-novidades h2 {
+            color: #004d61;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .item-novidade {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .item-novidade:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .item-novidade .data-novidade {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .item-novidade .texto-novidade {
+            font-size: 0.9rem;
+            color: #334155;
+            line-height: 1.4;
+        }
+
+        /* Responsividade para telas menores */
+        @media (max-width: 900px) {
+            .wrapper-conteudo {
+                flex-direction: column;
+                align-items: center;
+            }
+            .container-novidades {
+                max-width: 800px;
+                order: 2; /* Move as novidades para baixo do painel principal no celular */
+            }
+        }
     </style>
 </head>
 <body>
@@ -141,22 +211,37 @@
         <img src="https://i.ibb.co/tMYkXHps/Chat-GPT-Image-19-de-mai-de-2026-11-06-18-Photoroom-1.png" alt="NGI Labs Logo" class="logo">
     </header>
 
-    <main class="container-projetos">
-        <h1></h1>                                         
-        <div class="grid-links">
-            <a href="apps.html" class="card-link">
-                <span class="icon">📱</span>
-                <span>Aplicativos</span>
-            </a>
+    <div class="wrapper-conteudo">
 
-            <a href="dash.html" class="card-link">
-                <span class="icon">📶</span>
-                <span>Dashboards</span>
-            </a>
-        </div>
-    </main>
+        <aside class="container-novidades">
+            <h2>Novidades</h2>
+            
+            <div class="item-novidade">
+                <span class="data-novidade">03 JUNHO 2026</span>
+                <p class="texto-novidade">- Adicionado o novo módulo "CalcData" na seção de Aplicativos.<br>
+                                          <br>
+                                          - Adicionado BI "Extrato Aux. Saúde" na seção Dashboards, aba Folha de Pagamento e Financeiro.
+                </p>
+            </div>
 
-    <footer>
+
+            </aside>
+        <main class="container-projetos">
+            <h1></h1>                                         
+            <div class="grid-links">
+                <a href="apps.html" class="card-link">
+                    <span class="icon">📱</span>
+                    <span>Aplicativos</span>
+                </a>
+
+                <a href="dash.html" class="card-link">
+                    <span class="icon">📶</span>
+                    <span>Dashboards</span>
+                </a>
+            </div>
+        </main>
+
+    </div> <footer>
         <div class="footer-logos">
             <img src="https://i.ibb.co/FkLCjrFV/Capturar-removebg-preview-1.png" class="footer-logo" alt="Logo 1"> 
             <img src="https://i.ibb.co/yc32bwv5/Logo-DGF-upscaled-Photoroom.png" class="footer-logo" alt="Logo DGF">
